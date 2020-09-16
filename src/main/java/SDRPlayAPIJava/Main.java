@@ -9,11 +9,7 @@ import io.github.sammy1am.sdrplay.api.SDRPlayAPI;
 import io.github.sammy1am.sdrplay.api.SDRPlayAPI.sdrplay_api_CallbackFnsT;
 import io.github.sammy1am.sdrplay.api.SDRPlayAPI.sdrplay_api_DeviceT;
 import io.github.sammy1am.sdrplay.api.SDRPlayAPI.sdrplay_api_ErrT;
-import io.github.sammy1am.sdrplay.api.SDRPlayAPI.sdrplay_api_StreamCallback_t;
-import io.github.sammy1am.sdrplay.api.SDRPlayAPI.sdrplay_api_TunerSelectT;
 import com.sun.jna.Pointer;
-import com.sun.jna.ToNativeContext;
-import com.sun.jna.platform.EnumConverter;
 import com.sun.jna.ptr.FloatByReference;
 import com.sun.jna.ptr.IntByReference;
 
