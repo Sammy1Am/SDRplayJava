@@ -5,10 +5,13 @@
  */
 package SDRPlayAPIJava;
 
-import com.sammy1am.sdrplay.api.SDRPlayAPI;
-import com.sammy1am.sdrplay.api.SDRPlayAPI.sdrplay_api_DeviceT;
-import com.sammy1am.sdrplay.api.SDRPlayAPI.sdrplay_api_ErrT;
-import com.sammy1am.sdrplay.api.SDRPlayAPI.sdrplay_api_TunerSelectT;
+import io.github.sammy1am.sdrplay.api.SDRPlayAPI;
+import io.github.sammy1am.sdrplay.api.SDRPlayAPI.sdrplay_api_CallbackFnsT;
+import io.github.sammy1am.sdrplay.api.SDRPlayAPI.sdrplay_api_DeviceT;
+import io.github.sammy1am.sdrplay.api.SDRPlayAPI.sdrplay_api_ErrT;
+import io.github.sammy1am.sdrplay.api.SDRPlayAPI.sdrplay_api_StreamCallback_t;
+import io.github.sammy1am.sdrplay.api.SDRPlayAPI.sdrplay_api_TunerSelectT;
+import com.sun.jna.Pointer;
 import com.sun.jna.ToNativeContext;
 import com.sun.jna.platform.EnumConverter;
 import com.sun.jna.ptr.FloatByReference;
@@ -37,6 +40,22 @@ public class Main {
         IntByReference numDevices = new IntByReference();
         sdrplay_api_DeviceT[] devices = new sdrplay_api_DeviceT[16];
         returnCode = api.sdrplay_api_GetDevices(devices, numDevices, 16);
+        
+        
+        sdrplay_api_DeviceT testDevice = devices[0];
+        returnCode = api.sdrplay_api_SelectDevice(testDevice);
+        
+        sdrplay_api_CallbackFnsT callbacks = new sdrplay_api_CallbackFnsT();
+        callbacks.StreamACbFn = (xi, xq, params, numSamples, reset, cbContext) -> {System.out.println("StrA");};
+        callbacks.StreamBCbFn = (xi, xq, params, numSamples, reset, cbContext) -> {System.out.println("StrB");};
+        callbacks.EventCbFn = (eventId, tuner, params, cbContext) -> {
+            System.out.println("Event: " + eventId);
+        };
+        Pointer p = Pointer.NULL;
+        returnCode = api.sdrplay_api_Init(testDevice.dev, callbacks, p);
+        
+        
+        returnCode = api.sdrplay_api_Uninit(testDevice.dev);
         
         returnCode = api.sdrplay_api_Close();
         

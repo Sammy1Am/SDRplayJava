@@ -3,11 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.sammy1am.sdrplay.api;
+package io.github.sammy1am.sdrplay.api;
 
-import com.sammy1am.sdrplay.api.SDRPlayAPI.sdrplay_api_ErrT;
-import com.sammy1am.sdrplay.api.SDRPlayAPI.sdrplay_api_RspDuoModeT;
-import com.sammy1am.sdrplay.api.SDRPlayAPI.sdrplay_api_TunerSelectT;
+import io.github.sammy1am.sdrplay.api.SDRPlayAPI.sdrplay_api_ErrT;
+import io.github.sammy1am.sdrplay.api.SDRPlayAPI.sdrplay_api_EventT;
+import io.github.sammy1am.sdrplay.api.SDRPlayAPI.sdrplay_api_PowerOverloadCbEventIdT;
+import io.github.sammy1am.sdrplay.api.SDRPlayAPI.sdrplay_api_RspDuoModeCbEventIdT;
+import io.github.sammy1am.sdrplay.api.SDRPlayAPI.sdrplay_api_RspDuoModeT;
+import io.github.sammy1am.sdrplay.api.SDRPlayAPI.sdrplay_api_TunerSelectT;
 import com.sun.jna.DefaultTypeMapper;
 import com.sun.jna.ToNativeContext;
 import com.sun.jna.platform.EnumConverter;
@@ -29,6 +32,18 @@ public class SDRPlayTypeMapper extends DefaultTypeMapper {
         EnumConverter<sdrplay_api_RspDuoModeT> rspDuoModeTConverter = new NullAwareEnumConverter<>(sdrplay_api_RspDuoModeT.class);
         addFromNativeConverter(sdrplay_api_RspDuoModeT.class, rspDuoModeTConverter);
         addToNativeConverter(sdrplay_api_RspDuoModeT.class, rspDuoModeTConverter);
+        
+        EnumConverter<sdrplay_api_EventT> eventTConverter = new NullAwareEnumConverter<>(sdrplay_api_EventT.class);
+        addFromNativeConverter(sdrplay_api_EventT.class, eventTConverter);
+        addToNativeConverter(sdrplay_api_EventT.class, eventTConverter);
+        
+        EnumConverter<sdrplay_api_PowerOverloadCbEventIdT> powerOverloadCbEventIdTConverter = new NullAwareEnumConverter<>(sdrplay_api_PowerOverloadCbEventIdT.class);
+        addFromNativeConverter(sdrplay_api_PowerOverloadCbEventIdT.class, powerOverloadCbEventIdTConverter);
+        addToNativeConverter(sdrplay_api_PowerOverloadCbEventIdT.class, powerOverloadCbEventIdTConverter);
+        
+        EnumConverter<sdrplay_api_RspDuoModeCbEventIdT> rspDuoModeCbEventIdTConverter = new NullAwareEnumConverter<>(sdrplay_api_RspDuoModeCbEventIdT.class);
+        addFromNativeConverter(sdrplay_api_RspDuoModeCbEventIdT.class, rspDuoModeCbEventIdTConverter);
+        addToNativeConverter(sdrplay_api_RspDuoModeCbEventIdT.class, rspDuoModeCbEventIdTConverter);
     }
     
     /**
