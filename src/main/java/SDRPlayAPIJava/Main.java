@@ -12,6 +12,7 @@ import io.github.sammy1am.sdrplay.api.SDRPlayAPI.sdrplay_api_ErrT;
 import com.sun.jna.Pointer;
 import com.sun.jna.ptr.FloatByReference;
 import com.sun.jna.ptr.IntByReference;
+import io.github.sammy1am.sdrplay.api.SDRPlayAPI.sdrplay_api_DeviceParamsT;
 
 /**
  *
@@ -41,6 +42,9 @@ public class Main {
         sdrplay_api_DeviceT testDevice = devices[0];
         returnCode = api.sdrplay_api_SelectDevice(testDevice);
         
+        sdrplay_api_DeviceParamsT devParams = new sdrplay_api_DeviceParamsT();
+        returnCode = api.sdrplay_api_GetDeviceParams(testDevice.dev, devParams);
+        
         sdrplay_api_CallbackFnsT callbacks = new sdrplay_api_CallbackFnsT();
         callbacks.StreamACbFn = (xi, xq, params, numSamples, reset, cbContext) -> {System.out.println("StrA");};
         callbacks.StreamBCbFn = (xi, xq, params, numSamples, reset, cbContext) -> {System.out.println("StrB");};
@@ -50,6 +54,7 @@ public class Main {
         Pointer p = Pointer.NULL;
         returnCode = api.sdrplay_api_Init(testDevice.dev, callbacks, p);
         
+        returnCode = api.sdrplay_api_GetDeviceParams(testDevice.dev, devParams);
         
         returnCode = api.sdrplay_api_Uninit(testDevice.dev);
         
