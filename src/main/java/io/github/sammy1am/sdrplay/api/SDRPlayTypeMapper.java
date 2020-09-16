@@ -10,10 +10,16 @@ import io.github.sammy1am.sdrplay.api.SDRPlayAPI.sdrplay_api_EventT;
 import io.github.sammy1am.sdrplay.api.SDRPlayAPI.sdrplay_api_PowerOverloadCbEventIdT;
 import io.github.sammy1am.sdrplay.api.SDRPlayAPI.sdrplay_api_RspDuoModeCbEventIdT;
 import io.github.sammy1am.sdrplay.api.SDRPlayAPI.sdrplay_api_RspDuoModeT;
-import io.github.sammy1am.sdrplay.api.SDRPlayAPI.sdrplay_api_TunerSelectT;
 import com.sun.jna.DefaultTypeMapper;
 import com.sun.jna.ToNativeContext;
 import com.sun.jna.platform.EnumConverter;
+import io.github.sammy1am.sdrplay.api.SDRPlayAPI.sdrplay_api_RspDx_AntennaSelectT;
+import io.github.sammy1am.sdrplay.api.SDRPlayAPI.sdrplay_api_TransferModeT;
+import io.github.sammy1am.sdrplay.api.SDRPlayAPITuner.sdrplay_api_TunerSelectT;
+import io.github.sammy1am.sdrplay.api.SDRPlayAPITuner.sdrplay_api_Bw_MHzT;
+import io.github.sammy1am.sdrplay.api.SDRPlayAPITuner.sdrplay_api_If_kHzT;
+import io.github.sammy1am.sdrplay.api.SDRPlayAPITuner.sdrplay_api_LoModeT;
+import io.github.sammy1am.sdrplay.api.SDRPlayAPITuner.sdrplay_api_MinGainReductionT;
 
 /**
  *
@@ -25,25 +31,24 @@ public class SDRPlayTypeMapper extends DefaultTypeMapper {
         addFromNativeConverter(sdrplay_api_ErrT.class, errTConverter);
         addToNativeConverter(sdrplay_api_ErrT.class, errTConverter);
         
-        EnumConverter<sdrplay_api_TunerSelectT> tunerSelectTConverter = new NullAwareEnumConverter<>(sdrplay_api_TunerSelectT.class);
-        addFromNativeConverter(sdrplay_api_TunerSelectT.class, tunerSelectTConverter);
-        addToNativeConverter(sdrplay_api_TunerSelectT.class, tunerSelectTConverter);
         
-        EnumConverter<sdrplay_api_RspDuoModeT> rspDuoModeTConverter = new NullAwareEnumConverter<>(sdrplay_api_RspDuoModeT.class);
-        addFromNativeConverter(sdrplay_api_RspDuoModeT.class, rspDuoModeTConverter);
-        addToNativeConverter(sdrplay_api_RspDuoModeT.class, rspDuoModeTConverter);
-        
-        EnumConverter<sdrplay_api_EventT> eventTConverter = new NullAwareEnumConverter<>(sdrplay_api_EventT.class);
-        addFromNativeConverter(sdrplay_api_EventT.class, eventTConverter);
-        addToNativeConverter(sdrplay_api_EventT.class, eventTConverter);
-        
-        EnumConverter<sdrplay_api_PowerOverloadCbEventIdT> powerOverloadCbEventIdTConverter = new NullAwareEnumConverter<>(sdrplay_api_PowerOverloadCbEventIdT.class);
-        addFromNativeConverter(sdrplay_api_PowerOverloadCbEventIdT.class, powerOverloadCbEventIdTConverter);
-        addToNativeConverter(sdrplay_api_PowerOverloadCbEventIdT.class, powerOverloadCbEventIdTConverter);
-        
-        EnumConverter<sdrplay_api_RspDuoModeCbEventIdT> rspDuoModeCbEventIdTConverter = new NullAwareEnumConverter<>(sdrplay_api_RspDuoModeCbEventIdT.class);
-        addFromNativeConverter(sdrplay_api_RspDuoModeCbEventIdT.class, rspDuoModeCbEventIdTConverter);
-        addToNativeConverter(sdrplay_api_RspDuoModeCbEventIdT.class, rspDuoModeCbEventIdTConverter);
+        addConverterForEnum(sdrplay_api_RspDuoModeT.class);
+        addConverterForEnum(sdrplay_api_EventT.class);
+        addConverterForEnum(sdrplay_api_PowerOverloadCbEventIdT.class);
+        addConverterForEnum(sdrplay_api_RspDuoModeCbEventIdT.class);
+        addConverterForEnum(sdrplay_api_TransferModeT.class);
+        addConverterForEnum(sdrplay_api_RspDx_AntennaSelectT.class);
+        addConverterForEnum(sdrplay_api_Bw_MHzT.class);
+        addConverterForEnum(sdrplay_api_If_kHzT.class);
+        addConverterForEnum(sdrplay_api_LoModeT.class);
+        addConverterForEnum(sdrplay_api_MinGainReductionT.class);
+        addConverterForEnum(sdrplay_api_TunerSelectT.class);
+    }
+    
+    private <T extends Enum<T>> void addConverterForEnum(Class<T> enumClass) {
+        EnumConverter<T> converter = new NullAwareEnumConverter<>(enumClass);
+        addFromNativeConverter(enumClass, converter);
+        addToNativeConverter(enumClass, converter);
     }
     
     /**
