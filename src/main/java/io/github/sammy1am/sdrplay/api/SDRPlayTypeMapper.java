@@ -5,25 +5,11 @@
  */
 package io.github.sammy1am.sdrplay.api;
 
-import io.github.sammy1am.sdrplay.api.SDRPlayAPI.sdrplay_api_ErrT;
-import io.github.sammy1am.sdrplay.api.SDRPlayAPI.sdrplay_api_EventT;
-import io.github.sammy1am.sdrplay.api.SDRPlayAPI.sdrplay_api_PowerOverloadCbEventIdT;
-import io.github.sammy1am.sdrplay.api.SDRPlayAPI.sdrplay_api_RspDuoModeCbEventIdT;
-import io.github.sammy1am.sdrplay.api.SDRPlayAPI.sdrplay_api_RspDuoModeT;
+
 import com.sun.jna.DefaultTypeMapper;
 import com.sun.jna.ToNativeContext;
 import com.sun.jna.platform.EnumConverter;
-import io.github.sammy1am.sdrplay.api.SDRPlayAPI.sdrplay_api_RspDx_AntennaSelectT;
-import io.github.sammy1am.sdrplay.api.SDRPlayAPI.sdrplay_api_TransferModeT;
-import io.github.sammy1am.sdrplay.api.SDRPlayAPI.sdrplay_api_TunerSelectT;
-import io.github.sammy1am.sdrplay.api.SDRPlayAPI.sdrplay_api_Bw_MHzT;
-import io.github.sammy1am.sdrplay.api.SDRPlayAPI.sdrplay_api_If_kHzT;
-import io.github.sammy1am.sdrplay.api.SDRPlayAPI.sdrplay_api_LoModeT;
-import io.github.sammy1am.sdrplay.api.SDRPlayAPI.sdrplay_api_MinGainReductionT;
-import io.github.sammy1am.sdrplay.api.SDRPlayAPI.sdrplay_api_Rsp2_AmPortSelectT;
-import io.github.sammy1am.sdrplay.api.SDRPlayAPI.sdrplay_api_Rsp2_AntennaSelectT;
-import io.github.sammy1am.sdrplay.api.SDRPlayAPI.sdrplay_api_RspDuo_AmPortSelectT;
-import io.github.sammy1am.sdrplay.api.SDRPlayAPI.sdrplay_api_RspDx_HdrModeBwT;
+import io.github.sammy1am.sdrplay.api.SDRPlayAPI.*;
 
 /**
  *
@@ -34,6 +20,9 @@ public class SDRPlayTypeMapper extends DefaultTypeMapper {
         EnumConverter<sdrplay_api_ErrT> errTConverter = new EnumConverter<>(sdrplay_api_ErrT.class);
         addFromNativeConverter(sdrplay_api_ErrT.class, errTConverter);
         addToNativeConverter(sdrplay_api_ErrT.class, errTConverter);
+        
+        addConverterForEnum(sdrplay_api_ReasonForUpdateT.class);
+        addConverterForEnum(sdrplay_api_ReasonForUpdateExtension1T.class);
         
         //Device
         addConverterForEnum(sdrplay_api_RspDuoModeT.class);

@@ -894,8 +894,7 @@ public interface SDRPlayAPI extends Library {
 			super();
 		}
 		protected List<String> getFieldOrder() {
-                    return Arrays.asList("tunerParams");
-			//return Arrays.asList("tunerParams", "ctrlParams", "rsp1aTunerParams", "rsp2TunerParams", "rspDuoTunerParams", "rspDxTunerParams");
+                    return Arrays.asList("tunerParams",/* "ctrlParams",*/ "rsp1aTunerParams", "rsp2TunerParams", "rspDuoTunerParams", "rspDxTunerParams");
 		}
                 
                 public static class ByReference extends sdrplay_api_RxChannelParamsT implements Structure.ByReference{};
