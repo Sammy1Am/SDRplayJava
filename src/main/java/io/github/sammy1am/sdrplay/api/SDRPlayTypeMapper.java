@@ -20,6 +20,10 @@ import io.github.sammy1am.sdrplay.api.SDRPlayAPI.sdrplay_api_Bw_MHzT;
 import io.github.sammy1am.sdrplay.api.SDRPlayAPI.sdrplay_api_If_kHzT;
 import io.github.sammy1am.sdrplay.api.SDRPlayAPI.sdrplay_api_LoModeT;
 import io.github.sammy1am.sdrplay.api.SDRPlayAPI.sdrplay_api_MinGainReductionT;
+import io.github.sammy1am.sdrplay.api.SDRPlayAPI.sdrplay_api_Rsp2_AmPortSelectT;
+import io.github.sammy1am.sdrplay.api.SDRPlayAPI.sdrplay_api_Rsp2_AntennaSelectT;
+import io.github.sammy1am.sdrplay.api.SDRPlayAPI.sdrplay_api_RspDuo_AmPortSelectT;
+import io.github.sammy1am.sdrplay.api.SDRPlayAPI.sdrplay_api_RspDx_HdrModeBwT;
 
 /**
  *
@@ -31,7 +35,7 @@ public class SDRPlayTypeMapper extends DefaultTypeMapper {
         addFromNativeConverter(sdrplay_api_ErrT.class, errTConverter);
         addToNativeConverter(sdrplay_api_ErrT.class, errTConverter);
         
-        
+        //Device
         addConverterForEnum(sdrplay_api_RspDuoModeT.class);
         addConverterForEnum(sdrplay_api_EventT.class);
         addConverterForEnum(sdrplay_api_PowerOverloadCbEventIdT.class);
@@ -39,7 +43,13 @@ public class SDRPlayTypeMapper extends DefaultTypeMapper {
         
         addConverterForEnum(sdrplay_api_TransferModeT.class);
         addConverterForEnum(sdrplay_api_RspDx_AntennaSelectT.class);
+        addConverterForEnum(sdrplay_api_Rsp2_AntennaSelectT.class);
+        addConverterForEnum(sdrplay_api_Rsp2_AmPortSelectT.class);
+        addConverterForEnum(sdrplay_api_RspDuo_AmPortSelectT.class);
+        addConverterForEnum(sdrplay_api_RspDx_HdrModeBwT.class);
         
+        
+        //Tuner
         addConverterForEnum(sdrplay_api_Bw_MHzT.class);
         addConverterForEnum(sdrplay_api_If_kHzT.class);
         addConverterForEnum(sdrplay_api_LoModeT.class);

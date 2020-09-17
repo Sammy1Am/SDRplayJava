@@ -262,8 +262,112 @@ public interface SDRPlayAPI extends Library {
             return value;
         }
     }
-        
-        
+    
+    public static enum sdrplay_api_Rsp2_AntennaSelectT {
+        sdrplay_api_Rsp2_ANTENNA_A(5),
+        sdrplay_api_Rsp2_ANTENNA_B(6);
+
+        private int value;
+        private static Map map = new HashMap<>();
+
+        private sdrplay_api_Rsp2_AntennaSelectT(int value) {
+            this.value = value;
+        }
+
+        static {
+            for (sdrplay_api_Rsp2_AntennaSelectT errT : sdrplay_api_Rsp2_AntennaSelectT.values()) {
+                map.put(errT.value, errT);
+            }
+        }
+
+        public static sdrplay_api_Rsp2_AntennaSelectT valueOf(int errT) {
+            return (sdrplay_api_Rsp2_AntennaSelectT) map.get(errT);
+        }
+
+        public int getValue() {
+            return value;
+        }
+    }
+    
+    public static enum sdrplay_api_Rsp2_AmPortSelectT {
+        sdrplay_api_Rsp2_AMPORT_1(1),
+        sdrplay_api_Rsp2_AMPORT_2(0);
+
+        private int value;
+        private static Map map = new HashMap<>();
+
+        private sdrplay_api_Rsp2_AmPortSelectT(int value) {
+            this.value = value;
+        }
+
+        static {
+            for (sdrplay_api_Rsp2_AmPortSelectT valT : sdrplay_api_Rsp2_AmPortSelectT.values()) {
+                map.put(valT.value, valT);
+            }
+        }
+
+        public static sdrplay_api_Rsp2_AmPortSelectT valueOf(int valT) {
+            return (sdrplay_api_Rsp2_AmPortSelectT) map.get(valT);
+        }
+
+        public int getValue() {
+            return value;
+        }
+    }
+    
+    public static enum sdrplay_api_RspDuo_AmPortSelectT {
+        sdrplay_api_RspDuo_AMPORT_1(1),
+        sdrplay_api_RspDuo_AMPORT_2(0);
+
+        private int value;
+        private static Map map = new HashMap<>();
+
+        private sdrplay_api_RspDuo_AmPortSelectT(int value) {
+            this.value = value;
+        }
+
+        static {
+            for (sdrplay_api_RspDuo_AmPortSelectT valT : sdrplay_api_RspDuo_AmPortSelectT.values()) {
+                map.put(valT.value, valT);
+            }
+        }
+
+        public static sdrplay_api_RspDuo_AmPortSelectT valueOf(int valT) {
+            return (sdrplay_api_RspDuo_AmPortSelectT) map.get(valT);
+        }
+
+        public int getValue() {
+            return value;
+        }
+    }
+    
+    public static enum sdrplay_api_RspDx_HdrModeBwT {
+        sdrplay_api_RspDx_HDRMODE_BW_0_200(0),
+        sdrplay_api_RspDx_HDRMODE_BW_0_500(1),
+        sdrplay_api_RspDx_HDRMODE_BW_1_200(2),
+        sdrplay_api_RspDx_HDRMODE_BW_1_700(3);
+
+        private int value;
+        private static Map map = new HashMap<>();
+
+        private sdrplay_api_RspDx_HdrModeBwT(int value) {
+            this.value = value;
+        }
+
+        static {
+            for (sdrplay_api_RspDx_HdrModeBwT valT : sdrplay_api_RspDx_HdrModeBwT.values()) {
+                map.put(valT.value, valT);
+            }
+        }
+
+        public static sdrplay_api_RspDx_HdrModeBwT valueOf(int valT) {
+            return (sdrplay_api_RspDx_HdrModeBwT) map.get(valT);
+        }
+
+        public int getValue() {
+            return value;
+        }
+    }
         
     public static class sdrplay_api_DevParamsT extends Structure {
 
@@ -353,6 +457,17 @@ public interface SDRPlayAPI extends Library {
         }
     }
     
+    public static class sdrplay_api_Rsp1aTunerParamsT extends Structure {
+        /** default: 0 */
+        public byte biasTEnable;
+        public sdrplay_api_Rsp1aTunerParamsT() {
+                super();
+        }
+        protected List<String> getFieldOrder() {
+                return Arrays.asList("biasTEnable");
+        }
+    }
+    
     public static class sdrplay_api_Rsp2ParamsT extends Structure {
         /** default: 0 */
         public byte extRefOutputEn;
@@ -362,6 +477,23 @@ public interface SDRPlayAPI extends Library {
         protected List<String> getFieldOrder() {
                 return Arrays.asList("extRefOutputEn");
         }
+    }
+    
+    public static class sdrplay_api_Rsp2TunerParamsT extends Structure {
+		/** default: 0 */
+		public byte biasTEnable;
+		/** default: sdrplay_api_Rsp2_AMPORT_2 */
+		public sdrplay_api_Rsp2_AmPortSelectT amPortSel;
+		/** default: sdrplay_api_Rsp2_ANTENNA_A */
+		public sdrplay_api_Rsp2_AntennaSelectT antennaSel;
+		/** default: 0 */
+		public byte rfNotchEnable;
+		public sdrplay_api_Rsp2TunerParamsT() {
+			super();
+		}
+		protected List<String> getFieldOrder() {
+			return Arrays.asList("biasTEnable", "amPortSel", "antennaSel", "rfNotchEnable");
+		}
     }
     
     public static class sdrplay_api_RspDuoParamsT extends Structure {
@@ -375,6 +507,25 @@ public interface SDRPlayAPI extends Library {
         }
     }
 
+    public static class sdrplay_api_RspDuoTunerParamsT extends Structure {
+		/** default: 0 */
+		public byte biasTEnable;
+		/** default: sdrplay_api_RspDuo_AMPORT_2 */
+		public sdrplay_api_RspDuo_AmPortSelectT tuner1AmPortSel;
+		/** default: 0 */
+		public byte tuner1AmNotchEnable;
+		/** default: 0 */
+		public byte rfNotchEnable;
+		/** default: 0 */
+		public byte rfDabNotchEnable;
+		public sdrplay_api_RspDuoTunerParamsT() {
+			super();
+		}
+		protected List<String> getFieldOrder() {
+			return Arrays.asList("biasTEnable", "tuner1AmPortSel", "tuner1AmNotchEnable", "rfNotchEnable", "rfDabNotchEnable");
+		}
+    }
+    
     public static class sdrplay_api_RspDxParamsT extends Structure {
         /** default: 0 */
         public byte hdrEnable;
@@ -392,6 +543,17 @@ public interface SDRPlayAPI extends Library {
         protected List<String> getFieldOrder() {
                 return Arrays.asList("hdrEnable", "biasTEnable", "antennaSel", "rfNotchEnable", "rfDabNotchEnable");
         }
+    }
+    
+    public static class sdrplay_api_RspDxTunerParamsT extends Structure {
+		/** default: sdrplay_api_RspDx_HDRMODE_BW_1_700 */
+		public sdrplay_api_RspDx_HdrModeBwT hdrBw;
+		public sdrplay_api_RspDxTunerParamsT() {
+			super();
+		}
+		protected List<String> getFieldOrder() {
+			return Arrays.asList("hdrBw");
+		}
     }
     
     //</editor-fold>
@@ -632,10 +794,10 @@ public interface SDRPlayAPI extends Library {
     public static class sdrplay_api_RxChannelParamsT extends Structure {
 		public sdrplay_api_TunerParamsT tunerParams;
 //		public sdrplay_api_ControlParamsT ctrlParams;
-//		public sdrplay_api_Rsp1aTunerParamsT rsp1aTunerParams;
-//		public sdrplay_api_Rsp2TunerParamsT rsp2TunerParams;
-//		public sdrplay_api_RspDuoTunerParamsT rspDuoTunerParams;
-//		public sdrplay_api_RspDxTunerParamsT rspDxTunerParams;
+		public sdrplay_api_Rsp1aTunerParamsT rsp1aTunerParams;
+		public sdrplay_api_Rsp2TunerParamsT rsp2TunerParams;
+		public sdrplay_api_RspDuoTunerParamsT rspDuoTunerParams;
+		public sdrplay_api_RspDxTunerParamsT rspDxTunerParams;
 		public sdrplay_api_RxChannelParamsT() {
 			super();
 		}
