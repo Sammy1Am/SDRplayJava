@@ -206,6 +206,98 @@ public interface SDRPlayAPI extends Library {
         }
     }
     
+    public static enum sdrplay_api_ReasonForUpdateT {
+        sdrplay_api_Update_None(0x00000000),
+        // Reasons for master only mode 
+        sdrplay_api_Update_Dev_Fs(0x00000001),
+        sdrplay_api_Update_Dev_Ppm(0x00000002),
+        sdrplay_api_Update_Dev_SyncUpdate(0x00000004),
+        sdrplay_api_Update_Dev_ResetFlags(0x00000008),
+        sdrplay_api_Update_Rsp1a_BiasTControl(0x00000010),
+        sdrplay_api_Update_Rsp1a_RfNotchControl(0x00000020),
+        sdrplay_api_Update_Rsp1a_RfDabNotchControl(0x00000040),
+        sdrplay_api_Update_Rsp2_BiasTControl(0x00000080),
+        sdrplay_api_Update_Rsp2_AmPortSelect(0x00000100),
+        sdrplay_api_Update_Rsp2_AntennaControl(0x00000200),
+        sdrplay_api_Update_Rsp2_RfNotchControl(0x00000400),
+        sdrplay_api_Update_Rsp2_ExtRefControl(0x00000800),
+        sdrplay_api_Update_RspDuo_ExtRefControl(0x00001000),
+        sdrplay_api_Update_Master_Spare_1(0x00002000),
+        sdrplay_api_Update_Master_Spare_2(0x00004000),
+        // Reasons for master and slave mode
+        // Note: sdrplay_api_Update_Tuner_Gr MUST be the first value defined in this section!
+        sdrplay_api_Update_Tuner_Gr(0x00008000),
+        sdrplay_api_Update_Tuner_GrLimits(0x00010000),
+        sdrplay_api_Update_Tuner_Frf(0x00020000),
+        sdrplay_api_Update_Tuner_BwType(0x00040000),
+        sdrplay_api_Update_Tuner_IfType(0x00080000),
+        sdrplay_api_Update_Tuner_DcOffset(0x00100000),
+        sdrplay_api_Update_Tuner_LoMode(0x00200000),
+        sdrplay_api_Update_Ctrl_DCoffsetIQimbalance(0x00400000),
+        sdrplay_api_Update_Ctrl_Decimation(0x00800000),
+        sdrplay_api_Update_Ctrl_Agc(0x01000000),
+        sdrplay_api_Update_Ctrl_AdsbMode(0x02000000),
+        sdrplay_api_Update_Ctrl_OverloadMsgAck(0x04000000),
+        sdrplay_api_Update_RspDuo_BiasTControl(0x08000000),
+        sdrplay_api_Update_RspDuo_AmPortSelect(0x10000000),
+        sdrplay_api_Update_RspDuo_Tuner1AmNotchControl(0x20000000),
+        sdrplay_api_Update_RspDuo_RfNotchControl(0x40000000),
+        sdrplay_api_Update_RspDuo_RfDabNotchControl(0x80000000);
+
+        private int value;
+        private static Map map = new HashMap<>();
+
+        private sdrplay_api_ReasonForUpdateT(int value) {
+            this.value = value;
+        }
+
+        static {
+            for (sdrplay_api_ReasonForUpdateT valT : sdrplay_api_ReasonForUpdateT.values()) {
+                map.put(valT.value, valT);
+            }
+        }
+
+        public static sdrplay_api_ReasonForUpdateT valueOf(int valT) {
+            return (sdrplay_api_ReasonForUpdateT) map.get(valT);
+        }
+
+        public int getValue() {
+            return value;
+        }
+    }
+    
+    public static enum sdrplay_api_ReasonForUpdateExtension1T {
+        sdrplay_api_Update_Ext1_None(0x00000000),
+        // Reasons for master only mode 
+        sdrplay_api_Update_RspDx_HdrEnable(0x00000001),
+        sdrplay_api_Update_RspDx_BiasTControl(0x00000002),
+        sdrplay_api_Update_RspDx_AntennaControl(0x00000004),
+        sdrplay_api_Update_RspDx_RfNotchControl(0x00000008),
+        sdrplay_api_Update_RspDx_RfDabNotchControl(0x00000010),
+        sdrplay_api_Update_RspDx_HdrBw(0x00000020);
+
+        private int value;
+        private static Map map = new HashMap<>();
+
+        private sdrplay_api_ReasonForUpdateExtension1T(int value) {
+            this.value = value;
+        }
+
+        static {
+            for (sdrplay_api_ReasonForUpdateExtension1T valT : sdrplay_api_ReasonForUpdateExtension1T.values()) {
+                map.put(valT.value, valT);
+            }
+        }
+
+        public static sdrplay_api_ReasonForUpdateExtension1T valueOf(int valT) {
+            return (sdrplay_api_ReasonForUpdateExtension1T) map.get(valT);
+        }
+
+        public int getValue() {
+            return value;
+        }
+    }
+    
     //</editor-fold>
     
     //<editor-fold desc="_dev">
@@ -964,7 +1056,7 @@ public interface SDRPlayAPI extends Library {
     sdrplay_api_ErrT sdrplay_api_GetDeviceParams(HANDLE dev, sdrplay_api_DeviceParamsT deviceParams); 
     sdrplay_api_ErrT sdrplay_api_Init(HANDLE dev, sdrplay_api_CallbackFnsT callbackFns, Pointer cbContext); 
     sdrplay_api_ErrT sdrplay_api_Uninit(HANDLE dev);
-//    _SDRPLAY_DLL_QUALIFIER sdrplay_api_ErrT        sdrplay_api_Update(HANDLE dev, sdrplay_api_TunerSelectT tuner, sdrplay_api_ReasonForUpdateT reasonForUpdate, sdrplay_api_ReasonForUpdateExtension1T reasonForUpdateExt1);
+    sdrplay_api_ErrT sdrplay_api_Update(HANDLE dev, sdrplay_api_TunerSelectT tuner, sdrplay_api_ReasonForUpdateT reasonForUpdate, sdrplay_api_ReasonForUpdateExtension1T reasonForUpdateExt1);
 //    _SDRPLAY_DLL_QUALIFIER sdrplay_api_ErrT        sdrplay_api_SwapRspDuoActiveTuner(HANDLE dev, sdrplay_api_TunerSelectT *currentTuner, sdrplay_api_RspDuo_AmPortSelectT tuner1AmPortSel);
     sdrplay_api_ErrT sdrplay_api_SwapRspDuoDualTunerModeSampleRate(HANDLE dev, DoubleByReference currentSampleRate);
 //    _SDRPLAY_DLL_QUALIFIER sdrplay_api_ErrT        sdrplay_api_SwapRspDuoMode(sdrplay_api_DeviceT *currDevice, sdrplay_api_DeviceParamsT **deviceParams,
