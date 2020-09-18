@@ -23,6 +23,8 @@ public class SDRPlayTypeMapper extends DefaultTypeMapper {
         
         addConverterForEnum(sdrplay_api_ReasonForUpdateT.class);
         addConverterForEnum(sdrplay_api_ReasonForUpdateExtension1T.class);
+        addConverterForEnum(sdrplay_api_DbgLvl_t.class);
+        
         
         //Device
         addConverterForEnum(sdrplay_api_RspDuoModeT.class);
@@ -44,6 +46,11 @@ public class SDRPlayTypeMapper extends DefaultTypeMapper {
         addConverterForEnum(sdrplay_api_LoModeT.class);
         addConverterForEnum(sdrplay_api_MinGainReductionT.class);
         addConverterForEnum(sdrplay_api_TunerSelectT.class);
+        
+        
+        //Control
+        addConverterForEnum(sdrplay_api_AgcControlT.class);
+        addConverterForEnum(sdrplay_api_AdsbModeT.class);
     }
     
     private <T extends Enum<T>> void addConverterForEnum(Class<T> enumClass) {

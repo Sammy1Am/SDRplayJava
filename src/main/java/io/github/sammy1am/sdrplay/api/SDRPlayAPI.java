@@ -298,6 +298,35 @@ public interface SDRPlayAPI extends Library {
         }
     }
     
+    public static enum sdrplay_api_DbgLvl_t {
+        sdrplay_api_DbgLvl_Disable(0),
+        sdrplay_api_DbgLvl_Verbose(1),
+        sdrplay_api_DbgLvl_Warning(2),
+        sdrplay_api_DbgLvl_Error(3),
+        sdrplay_api_DbgLvl_Message(4);
+
+        private int value;
+        private static Map map = new HashMap<>();
+
+        private sdrplay_api_DbgLvl_t(int value) {
+            this.value = value;
+        }
+
+        static {
+            for (sdrplay_api_DbgLvl_t valT : sdrplay_api_DbgLvl_t.values()) {
+                map.put(valT.value, valT);
+            }
+        }
+
+        public static sdrplay_api_DbgLvl_t valueOf(int valT) {
+            return (sdrplay_api_DbgLvl_t) map.get(valT);
+        }
+
+        public int getValue() {
+            return value;
+        }
+    }
+    
     //</editor-fold>
     
     //<editor-fold desc="_dev">
@@ -885,7 +914,7 @@ public interface SDRPlayAPI extends Library {
     //<editor-fold desc="_rx_channel">
     public static class sdrplay_api_RxChannelParamsT extends Structure {
 		public sdrplay_api_TunerParamsT tunerParams;
-//		public sdrplay_api_ControlParamsT ctrlParams;
+		public sdrplay_api_ControlParamsT ctrlParams;
 		public sdrplay_api_Rsp1aTunerParamsT rsp1aTunerParams;
 		public sdrplay_api_Rsp2TunerParamsT rsp2TunerParams;
 		public sdrplay_api_RspDuoTunerParamsT rspDuoTunerParams;
@@ -894,13 +923,142 @@ public interface SDRPlayAPI extends Library {
 			super();
 		}
 		protected List<String> getFieldOrder() {
-                    return Arrays.asList("tunerParams",/* "ctrlParams",*/ "rsp1aTunerParams", "rsp2TunerParams", "rspDuoTunerParams", "rspDxTunerParams");
+                    return Arrays.asList("tunerParams", "ctrlParams", "rsp1aTunerParams", "rsp2TunerParams", "rspDuoTunerParams", "rspDxTunerParams");
 		}
                 
                 public static class ByReference extends sdrplay_api_RxChannelParamsT implements Structure.ByReference{};
     }
     //</editor-fold>
     
+    //<editor-fold desc="_control">
+    
+    public static enum sdrplay_api_AgcControlT {
+        sdrplay_api_AGC_DISABLE(0),
+        sdrplay_api_AGC_100HZ(1),
+        sdrplay_api_AGC_50HZ(2),
+        sdrplay_api_AGC_5HZ(3),
+        sdrplay_api_AGC_CTRL_EN(4);
+
+        private int value;
+        private static Map map = new HashMap<>();
+
+        private sdrplay_api_AgcControlT(int value) {
+            this.value = value;
+        }
+
+        static {
+            for (sdrplay_api_AgcControlT valT : sdrplay_api_AgcControlT.values()) {
+                map.put(valT.value, valT);
+            }
+        }
+
+        public static sdrplay_api_AgcControlT valueOf(int valT) {
+            return (sdrplay_api_AgcControlT) map.get(valT);
+        }
+
+        public int getValue() {
+            return value;
+        }
+    }
+    
+    public static enum sdrplay_api_AdsbModeT {
+        sdrplay_api_ADSB_DECIMATION(0),
+        sdrplay_api_ADSB_NO_DECIMATION_LOWPASS(1),
+        sdrplay_api_ADSB_NO_DECIMATION_BANDPASS_2MHZ(2),
+        sdrplay_api_ADSB_NO_DECIMATION_BANDPASS_3MHZ(3);
+
+        private int value;
+        private static Map map = new HashMap<>();
+
+        private sdrplay_api_AdsbModeT(int value) {
+            this.value = value;
+        }
+
+        static {
+            for (sdrplay_api_AdsbModeT valT : sdrplay_api_AdsbModeT.values()) {
+                map.put(valT.value, valT);
+            }
+        }
+
+        public static sdrplay_api_AdsbModeT valueOf(int valT) {
+            return (sdrplay_api_AdsbModeT) map.get(valT);
+        }
+
+        public int getValue() {
+            return value;
+        }
+    }
+    
+    public static class sdrplay_api_DcOffsetT extends Structure {
+        /** default: 1 */
+        public byte DCenable;
+        /** default: 1 */
+        public byte IQenable;
+        public sdrplay_api_DcOffsetT() {
+                super();
+        }
+        protected List<String> getFieldOrder() {
+                return Arrays.asList("DCenable", "IQenable");
+        }
+    }
+    
+    public static class sdrplay_api_DecimationT extends Structure {
+        /** default: 0 */
+        public byte enable;
+        /** default: 1 */
+        public byte decimationFactor;
+        /** default: 0 */
+        public byte wideBandSignal;
+        public sdrplay_api_DecimationT() {
+                super();
+        }
+        protected List<String> getFieldOrder() {
+                return Arrays.asList("enable", "decimationFactor", "wideBandSignal");
+        }
+    }
+    
+    public static class sdrplay_api_AgcT extends Structure {
+        /**
+         * default: sdrplay_api_AGC_50HZ<br>
+         * C type : sdrplay_api_AgcControlT
+         */
+        public sdrplay_api_AgcControlT enable;
+        /** default: -60 */
+        public int setPoint_dBfs;
+        /** default: 0 */
+        public short attack_ms;
+        /** default: 0 */
+        public short decay_ms;
+        /** default: 0 */
+        public short decay_delay_ms;
+        /** default: 0 */
+        public short decay_threshold_dB;
+        /** default: 0 */
+        public int syncUpdate;
+        public sdrplay_api_AgcT() {
+                super();
+        }
+        protected List<String> getFieldOrder() {
+                return Arrays.asList("enable", "setPoint_dBfs", "attack_ms", "decay_ms", "decay_delay_ms", "decay_threshold_dB", "syncUpdate");
+        }
+    }
+    
+    public static class sdrplay_api_ControlParamsT extends Structure {
+        public sdrplay_api_DcOffsetT dcOffset;
+        public sdrplay_api_DecimationT decimation;
+        public sdrplay_api_AgcT agc;
+        public sdrplay_api_AdsbModeT adsbMode;  //default: sdrplay_api_ADSB_DECIMATION
+
+        public sdrplay_api_ControlParamsT() {
+            super();
+        }
+
+        protected List<String> getFieldOrder() {
+            return Arrays.asList("dcOffset", "decimation", "agc", "adsbMode");
+        }
+    }
+    
+    //</editor-fold>
     
     public static class HANDLE extends PointerType {
 
@@ -925,6 +1083,22 @@ public interface SDRPlayAPI extends Library {
         protected List<String> getFieldOrder() {
 		return Arrays.asList("SerNo", "hwVer", "tuner", "rspDuoMode", "rspDuoSampleFreq", "dev");
 	}
+    }
+    
+    public static class sdrplay_api_ErrorInfoT extends Structure {
+        /** C type : char[256] */
+        public byte[] file = new byte[256];
+        /** C type : char[256] */
+        public byte[] function = new byte[256];
+        public int line;
+        /** C type : char[1024] */
+        public byte[] message = new byte[1024];
+        public sdrplay_api_ErrorInfoT() {
+                super();
+        }
+        protected List<String> getFieldOrder() {
+                return Arrays.asList("file", "function", "line", "message");
+        }
     }
     
     //<editor-fold desc="Callback structures">
@@ -1047,15 +1221,16 @@ public interface SDRPlayAPI extends Library {
     sdrplay_api_ErrT sdrplay_api_SelectDevice(sdrplay_api_DeviceT device);
     sdrplay_api_ErrT sdrplay_api_ReleaseDevice(sdrplay_api_DeviceT device);
     String sdrplay_api_GetErrorString(sdrplay_api_ErrT err);
-//    _SDRPLAY_DLL_QUALIFIER sdrplay_api_ErrorInfoT* sdrplay_api_GetLastError(sdrplay_api_DeviceT *device);
+    sdrplay_api_ErrorInfoT sdrplay_api_GetLastError(sdrplay_api_DeviceT device);
     sdrplay_api_ErrT sdrplay_api_DisableHeartbeat(); // Must be called before sdrplay_api_SelectDevice()
 
     // Device API function definitions
-//    _SDRPLAY_DLL_QUALIFIER sdrplay_api_ErrT        sdrplay_api_DebugEnable(HANDLE dev, sdrplay_api_DbgLvl_t enable); 
+    sdrplay_api_ErrT        sdrplay_api_DebugEnable(HANDLE dev, sdrplay_api_DbgLvl_t enable); 
     sdrplay_api_ErrT sdrplay_api_GetDeviceParams(HANDLE dev, sdrplay_api_DeviceParamsT deviceParams); 
     sdrplay_api_ErrT sdrplay_api_Init(HANDLE dev, sdrplay_api_CallbackFnsT callbackFns, Pointer cbContext); 
     sdrplay_api_ErrT sdrplay_api_Uninit(HANDLE dev);
     sdrplay_api_ErrT sdrplay_api_Update(HANDLE dev, sdrplay_api_TunerSelectT tuner, sdrplay_api_ReasonForUpdateT reasonForUpdate, sdrplay_api_ReasonForUpdateExtension1T reasonForUpdateExt1);
+    sdrplay_api_ErrT sdrplay_api_Update(HANDLE dev, sdrplay_api_TunerSelectT tuner, int reasonForUpdate, sdrplay_api_ReasonForUpdateExtension1T reasonForUpdateExt1);
 //    _SDRPLAY_DLL_QUALIFIER sdrplay_api_ErrT        sdrplay_api_SwapRspDuoActiveTuner(HANDLE dev, sdrplay_api_TunerSelectT *currentTuner, sdrplay_api_RspDuo_AmPortSelectT tuner1AmPortSel);
     sdrplay_api_ErrT sdrplay_api_SwapRspDuoDualTunerModeSampleRate(HANDLE dev, DoubleByReference currentSampleRate);
 //    _SDRPLAY_DLL_QUALIFIER sdrplay_api_ErrT        sdrplay_api_SwapRspDuoMode(sdrplay_api_DeviceT *currDevice, sdrplay_api_DeviceParamsT **deviceParams,

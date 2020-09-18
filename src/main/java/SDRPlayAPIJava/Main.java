@@ -46,8 +46,8 @@ public class Main {
         returnCode = api.sdrplay_api_GetDeviceParams(testDevice.dev, devParams);
         
         sdrplay_api_CallbackFnsT callbacks = new sdrplay_api_CallbackFnsT();
-        callbacks.StreamACbFn = (xi, xq, params, numSamples, reset, cbContext) -> {System.out.println("StrA");};
-        callbacks.StreamBCbFn = (xi, xq, params, numSamples, reset, cbContext) -> {System.out.println("StrB");};
+        callbacks.StreamACbFn = (xi, xq, params, numSamples, reset, cbContext) -> {/*System.out.println("StrA");*/};
+        callbacks.StreamBCbFn = (xi, xq, params, numSamples, reset, cbContext) -> {/*System.out.println("StrB");*/};
         callbacks.EventCbFn = (eventId, tuner, params, cbContext) -> {
             System.out.println("Event: " + eventId);
         };
@@ -55,6 +55,11 @@ public class Main {
         returnCode = api.sdrplay_api_Init(testDevice.dev, callbacks, p);
         
         returnCode = api.sdrplay_api_GetDeviceParams(testDevice.dev, devParams);
+        
+        returnCode = api.sdrplay_api_Update(testDevice.dev, 
+                SDRPlayAPI.sdrplay_api_TunerSelectT.sdrplay_api_Tuner_A, 
+                SDRPlayAPI.sdrplay_api_ReasonForUpdateT.sdrplay_api_Update_Tuner_Frf, 
+                SDRPlayAPI.sdrplay_api_ReasonForUpdateExtension1T.sdrplay_api_Update_Ext1_None);
         
         returnCode = api.sdrplay_api_Uninit(testDevice.dev);
         
