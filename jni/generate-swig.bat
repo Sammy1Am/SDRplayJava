@@ -1,0 +1,1 @@
+C:\swigwin-4.0.2\swig.exe -java "-Iinclude" -outdir ../src/main/java/io/github/sammy1am/sdrplay/jni -package io.github.sammy1am.sdrplay.jni sdrplay_api.i
