@@ -1,0 +1,66 @@
+{
+    "tasks": [
+        {
+            "type": "shell",
+            "label": "SDRplayJNI: Build",
+            "command": "C:\\Win-Builds\\bin\\gcc.exe",
+            "args": [
+                "-Iinclude",
+                "-IC:\\openjdk-13\\include",
+                "-IC:\\openjdk-13\\include\\win32",
+                "-IC:\\openjdk-13\\include\\win32\\bridge",
+                "-shared",
+                "-Wl,--add-stdcall-alias",
+                "-o",
+                "${workspaceFolder}\\..\\src\\main\\resources\\win32-x86-64\\sdrplay_api_wrap.dll",
+                "${workspaceFolder}\\src\\sdrplay_api_wrap.c",
+                "${workspaceFolder}\\src\\sdrplay_api_java.c",
+                "C:\\Program Files\\SDRplay\\API\\x64\\sdrplay_api.dll"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "dependsOn": [
+                "SDRplayJNI: Execute SWIG"
+            ]
+        },
+        {
+            "type": "shell",
+            "label": "SDRplayJNI: Execute SWIG",
+            "command": "C:\\swigwin-4.0.2\\swig.exe",
+            "args": [
+                "-java",
+                "-Iinclude",
+                "-o",
+                "${workspaceFolder}/src/sdrplay_api_wrap.c",
+                "-outdir",
+                "${workspaceFolder}/../src/main/java/io/github/sammy1am/sdrplay/jni/swig",
+                "-package",
+                "io.github.sammy1am.sdrplay.jni.swig",
+                "sdrplay_api.i"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}",
+                "shell": {
+                    "executable": "cmd.exe",
+                    "args": ["/d", "/c"]
+                }
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+    ],
+    "version": "2.0.0"
+}
