@@ -1,3 +1,6 @@
+// Include this to make SWIG happy with SDRplayAPI
+#define _SDRPLAY_DLL_QUALIFIER
+
 %module sdrplay_api
 %{
     #include "sdrplay_api.h"

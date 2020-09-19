@@ -5,7 +5,7 @@
             "label": "SDRplayJNI: Build",
             "command": "C:\\Win-Builds\\bin\\gcc.exe",
             "args": [
-                "-Iinclude",
+                "-IC:\\Program Files\\SDRplay\\API\\inc",
                 "-IC:\\openjdk-13\\include",
                 "-IC:\\openjdk-13\\include\\win32",
                 "-IC:\\openjdk-13\\include\\win32\\bridge",
@@ -37,7 +37,7 @@
             "command": "C:\\swigwin-4.0.2\\swig.exe",
             "args": [
                 "-java",
-                "-Iinclude",
+                "-IC:\\Program Files\\SDRplay\\API\\inc",
                 "-o",
                 "${workspaceFolder}/src/sdrplay_api_wrap.c",
                 "-outdir",

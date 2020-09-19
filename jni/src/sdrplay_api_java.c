@@ -1,5 +1,9 @@
 #include "sdrplay_api_java.h"
 
+JNIEXPORT jint JNICALL Java_io_github_sammy1am_sdrplay_jni_SDRplayAPI_initDevice(JNIEnv *env, jclass thisClass) {
+    return 4;
+}
+
 JNIEXPORT void JNICALL Java_io_github_sammy1am_sdrplay_jni_SDRplayAPI_doTheThing(JNIEnv *env, jobject thisObject, jobject streamA, jobject streamB) {
     jclass scbClass = (*env)->FindClass(env, "io/github/sammy1am/sdrplay/jni/StreamCallback");
     jmethodID callMethodID = (*env)->GetMethodID(env, scbClass, "call", "([S[SI)V");

@@ -3,6 +3,7 @@
 
 #include "sdrplay_api.h"
 #include <jni.h>
+#include "../../build/generated/sources/headers/java/main/io_github_sammy1am_sdrplay_jni_SDRplayAPI.h"
 
 void streamCallbackA(short *xi, short *xq, sdrplay_api_StreamCbParamsT *params, unsigned int numSamples, unsigned int reset, void *cbContext);
 void streamCallbackB(short *xi, short *xq, sdrplay_api_StreamCbParamsT *params, unsigned int numSamples, unsigned int reset, void *cbContext);
