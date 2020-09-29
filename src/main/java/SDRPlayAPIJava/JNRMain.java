@@ -5,24 +5,16 @@
  */
 package SDRPlayAPIJava;
 
+
+import io.github.sammy1am.sdrplay.jnr.BaseStruct;
 import jnr.ffi.LibraryLoader;
-import jnr.ffi.Memory;
-import jnr.ffi.ObjectReferenceManager;
 import jnr.ffi.Pointer;
 import jnr.ffi.Struct;
 import jnr.ffi.annotations.Delegate;
 import jnr.ffi.byref.FloatByReference;
-import jnr.ffi.Runtime;
-import jnr.ffi.Struct.BYTE;
-import jnr.ffi.Struct.PointerField;
-import jnr.ffi.Struct.StructRef;
-import jnr.ffi.StructLayout;
 import jnr.ffi.annotations.Direct;
 import jnr.ffi.annotations.Out;
 import jnr.ffi.byref.IntByReference;
-import jnr.ffi.byref.PointerByReference;
-import jnr.ffi.provider.DelegatingMemoryIO;
-import jnr.ffi.provider.converters.StructArrayParameterConverter;
 
 /**
  *
@@ -31,30 +23,45 @@ import jnr.ffi.provider.converters.StructArrayParameterConverter;
 public class JNRMain {
     
     public static interface _SDRplayAPI {
+        
+        
         int sdrplay_api_Open();
         int sdrplay_api_ApiVersion(@Out FloatByReference apiVer);
         
         int sdrplay_api_GetDevices(@Out @Direct _DeviceT[] devices, IntByReference numDevs, int maxDevs);
         int sdrplay_api_SelectDevice(@Direct _DeviceT device);
-        int sdrplay_api_Init(Pointer dev, Pointer callbackFns, Pointer cbContext);
+        
+        int sdrplay_api_DebugEnable(@Direct Pointer dev, int enable);
+        int sdrplay_api_Init(@Direct Pointer dev, _CallbackFnsT callbackFns, Pointer cbContext);
     }
     
     public static interface StreamCallback {
         @Delegate
-        public void callback(Pointer xi, Pointer xq, Pointer params, int numSamples, int reset, Pointer cbContext);
+        public void call(Pointer xi, Pointer xq, Pointer params, int numSamples, int reset, Pointer cbContext);
     }
-    
+
     public static interface EventCallback {
         @Delegate
-        public void callback(int eventId, int tuner, Pointer params, Pointer cbContext);
+        public void call(int eventId, int tuner, Pointer params, Pointer cbContext);
     }
     
-    public static class _CallbackFnsT extends Struct {
+//    public static class _CallbackFnsT extends Struct {
+//        
+//        public StreamCallback StreamACbFn = null;
+//        public StreamCallback StreamBCbFn = null;
+//        public EventCallback EventCbFn = null;
+//
+//        public _CallbackFnsT(final jnr.ffi.Runtime runtime) {
+//            super(runtime);
+//        }
+//    }
+    
+    public static class _CallbackFnsT extends BaseStruct {
         
-        public StreamCallback StreamACbFn;
-        public StreamCallback StreamBCbFn;
-        public EventCallback EventCbFn;
-        
+        public final Func<StreamCallback> StreamACbFn = func(StreamCallback.class);
+        public final Func<StreamCallback> StreamBCbFn = func(StreamCallback.class);
+        public final Func<EventCallback> EventCbFn = func(EventCallback.class);
+
         public _CallbackFnsT(final jnr.ffi.Runtime runtime) {
             super(runtime);
         }
@@ -92,31 +99,70 @@ public class JNRMain {
         // Select device
         err = API.sdrplay_api_SelectDevice(devices[0]);
         
+        // Set Debug
+        err = API.sdrplay_api_DebugEnable(devices[0].dev.get(), 1);
+        
         // Init device
         _CallbackFnsT callbacks = new _CallbackFnsT(runtime);
+     
+        
+        StreamCallback scba =  new StreamCallback() {
+            @Override
+            public void call(Pointer xi, Pointer xq, Pointer params, int numSamples, int reset, Pointer cbContext) {
+                System.out.println("Got A!");
+            }
+        };
+        
+        StreamCallback scbb =  new StreamCallback() {
+            @Override
+            public void call(Pointer xi, Pointer xq, Pointer params, int numSamples, int reset, Pointer cbContext) {
+                System.out.println("Got A!");
+            }
+        };
+        
+        EventCallback ecb = new EventCallback() {
+            @Override
+            public void call(int eventId, int tuner, Pointer params, Pointer cbContext) {
+                System.out.println("Got Event!");
+            }
+        };
+        
+        
+        
+        callbacks.StreamACbFn.set(scba);
+        callbacks.StreamBCbFn.set(scbb);
+        callbacks.EventCbFn.set(ecb);
+
+
+        
+//        Pointer testPtr = runtime.getMemoryManager().allocateDirect(Struct.size(callbacks));
+//        callbacks.useMemory(testPtr);
 //        
-//        callbacks.StreamACbFn = new StreamCallback() {
+//        StreamCallback scba =  new StreamCallback() {
 //            @Override
-//            public void callback(Pointer xi, Pointer xq, Pointer params, int numSamples, int reset, Pointer cbContext) {
+//            public void call(Pointer xi, Pointer xq, Pointer params, int numSamples, int reset, Pointer cbContext) {
 //                System.out.println("Got A!");
 //            }
 //        };
 //        
+//        callbacks.StreamACbFn = scba;
+//
 //        callbacks.StreamBCbFn = new StreamCallback() {
 //            @Override
-//            public void callback(Pointer xi, Pointer xq, Pointer params, int numSamples, int reset, Pointer cbContext) {
+//            public void call(Pointer xi, Pointer xq, Pointer params, int numSamples, int reset, Pointer cbContext) {
 //                System.out.println("Got A!");
 //            }
 //        };
-//        
+//
 //        callbacks.EventCbFn = new EventCallback() {
 //            @Override
-//            public void callback(int eventId, int tuner, Pointer params, Pointer cbContext) {
+//            public void call(int eventId, int tuner, Pointer params, Pointer cbContext) {
 //                System.out.println("Got Event!");
 //            }
 //        };
         
-        err = API.sdrplay_api_Init(devices[0].dev.get(), Struct.getMemory(callbacks), null);
+        err = API.sdrplay_api_Init(devices[0].dev.get(), callbacks, null);
+        //err = API.sdrplay_api_Init(devices[0].dev.get(), Struct.getMemory(callbacks), null);
         System.out.println("We're done!");
     }
 }
