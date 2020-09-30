@@ -26,13 +26,19 @@ public class JNRMain {
         
         
         int sdrplay_api_Open();
+        int sdrplay_api_Close();
         int sdrplay_api_ApiVersion(@Out FloatByReference apiVer);
+        int sdrplay_api_LockDeviceApi();    
+        int sdrplay_api_UnlockDeviceApi();
         
         int sdrplay_api_GetDevices(@Out @Direct _DeviceT[] devices, IntByReference numDevs, int maxDevs);
         int sdrplay_api_SelectDevice(@Direct _DeviceT device);
+        int sdrplay_api_ReleaseDevice(@Direct _DeviceT device);
         
         int sdrplay_api_DebugEnable(@Direct Pointer dev, int enable);
         int sdrplay_api_Init(@Direct Pointer dev, _CallbackFnsT callbackFns, Pointer cbContext);
+        int sdrplay_api_Uninit(@Direct Pointer dev);
+        int sdrplay_api_Update(@Direct Pointer dev, int tuner, int reasonForUpdate, int reasonForUpdateExt1);
     }
     
     public static interface StreamCallback {
@@ -133,36 +139,13 @@ public class JNRMain {
         callbacks.StreamBCbFn.set(scbb);
         callbacks.EventCbFn.set(ecb);
 
-
-        
-//        Pointer testPtr = runtime.getMemoryManager().allocateDirect(Struct.size(callbacks));
-//        callbacks.useMemory(testPtr);
-//        
-//        StreamCallback scba =  new StreamCallback() {
-//            @Override
-//            public void call(Pointer xi, Pointer xq, Pointer params, int numSamples, int reset, Pointer cbContext) {
-//                System.out.println("Got A!");
-//            }
-//        };
-//        
-//        callbacks.StreamACbFn = scba;
-//
-//        callbacks.StreamBCbFn = new StreamCallback() {
-//            @Override
-//            public void call(Pointer xi, Pointer xq, Pointer params, int numSamples, int reset, Pointer cbContext) {
-//                System.out.println("Got A!");
-//            }
-//        };
-//
-//        callbacks.EventCbFn = new EventCallback() {
-//            @Override
-//            public void call(int eventId, int tuner, Pointer params, Pointer cbContext) {
-//                System.out.println("Got Event!");
-//            }
-//        };
         
         err = API.sdrplay_api_Init(devices[0].dev.get(), callbacks, null);
-        //err = API.sdrplay_api_Init(devices[0].dev.get(), Struct.getMemory(callbacks), null);
+
+        // Update
+        err = API.sdrplay_api_Update(devices[0].dev.get(), 1, 0x00020000, 0x00000000);
+        
+        
         System.out.println("We're done!");
     }
 }
