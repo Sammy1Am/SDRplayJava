@@ -8,6 +8,7 @@ package SDRPlayAPIJava;
 
 import io.github.sammy1am.sdrplay.api.ApiException.ErrT;
 import io.github.sammy1am.sdrplay.jnr.BaseStruct;
+import io.github.sammy1am.sdrplay.jnr.DeviceParamsT;
 import io.github.sammy1am.sdrplay.jnr.DeviceT;
 import jnr.ffi.LibraryLoader;
 import jnr.ffi.Pointer;
@@ -17,6 +18,8 @@ import jnr.ffi.byref.FloatByReference;
 import jnr.ffi.annotations.Direct;
 import jnr.ffi.annotations.Out;
 import jnr.ffi.byref.IntByReference;
+import jnr.ffi.byref.PointerByReference;
+import jnr.ffi.provider.ParameterFlags;
 
 /**
  *
@@ -38,6 +41,7 @@ public class JNRMain {
         int sdrplay_api_ReleaseDevice(@Direct DeviceT device);
         
         int sdrplay_api_DebugEnable(@Direct Pointer dev, int enable);
+        ErrT sdrplay_api_GetDeviceParams(@Direct Pointer dev, @Direct PointerByReference deviceParamsPBR);
         int sdrplay_api_Init(@Direct Pointer dev, _CallbackFnsT callbackFns, Pointer cbContext);
         int sdrplay_api_Uninit(@Direct Pointer dev);
         int sdrplay_api_Update(@Direct Pointer dev, int tuner, int reasonForUpdate, int reasonForUpdateExt1);
@@ -53,16 +57,6 @@ public class JNRMain {
         public void call(int eventId, int tuner, Pointer params, Pointer cbContext);
     }
     
-//    public static class _CallbackFnsT extends Struct {
-//        
-//        public StreamCallback StreamACbFn = null;
-//        public StreamCallback StreamBCbFn = null;
-//        public EventCallback EventCbFn = null;
-//
-//        public _CallbackFnsT(final jnr.ffi.Runtime runtime) {
-//            super(runtime);
-//        }
-//    }
     
     public static class _CallbackFnsT extends BaseStruct {
         
@@ -88,9 +82,9 @@ public class JNRMain {
         System.out.println("API: "+ apiVer.floatValue());
         
         // List devices
-        DeviceT[] devices = Struct.arrayOf(runtime, DeviceT.class, 1);
+        DeviceT[] devices = Struct.arrayOf(runtime, DeviceT.class, 16);
         IntByReference numDevices = new IntByReference();
-        err = API.sdrplay_api_GetDevices(devices, numDevices, 1);
+        err = API.sdrplay_api_GetDevices(devices, numDevices, 16);
 
         // Select device
         err = API.sdrplay_api_SelectDevice(devices[0]);
@@ -132,8 +126,19 @@ public class JNRMain {
         
         err = API.sdrplay_api_Init(devices[0].dev.get(), callbacks, null);
 
+        // Get Params
+        PointerByReference deviceParamsPBR = new PointerByReference();
+        
+        errorCode = API.sdrplay_api_GetDeviceParams(devices[0].dev.get(), deviceParamsPBR);
+        
+        DeviceParamsT deviceParams = new DeviceParamsT(runtime);
+        deviceParams.useMemory(deviceParamsPBR.getValue());
+        
+        
+        deviceParams.devParams.get().ppm.set(3.0);
+        
         // Update
-        err = API.sdrplay_api_Update(devices[0].dev.get(), 1, 0x00020000, 0x00000000);
+        err = API.sdrplay_api_Update(devices[0].dev.get(), 1, 0x00000002, 0x00000000);
         
         
         System.out.println("We're done!");
