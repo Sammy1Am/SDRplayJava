@@ -6,7 +6,9 @@
 package SDRPlayAPIJava;
 
 
+import io.github.sammy1am.sdrplay.api.ApiException.ErrT;
 import io.github.sammy1am.sdrplay.jnr.BaseStruct;
+import io.github.sammy1am.sdrplay.jnr.DeviceT;
 import jnr.ffi.LibraryLoader;
 import jnr.ffi.Pointer;
 import jnr.ffi.Struct;
@@ -25,15 +27,15 @@ public class JNRMain {
     public static interface _SDRplayAPI {
         
         
-        int sdrplay_api_Open();
+        ErrT sdrplay_api_Open();
         int sdrplay_api_Close();
         int sdrplay_api_ApiVersion(@Out FloatByReference apiVer);
         int sdrplay_api_LockDeviceApi();    
         int sdrplay_api_UnlockDeviceApi();
         
-        int sdrplay_api_GetDevices(@Out @Direct _DeviceT[] devices, IntByReference numDevs, int maxDevs);
-        int sdrplay_api_SelectDevice(@Direct _DeviceT device);
-        int sdrplay_api_ReleaseDevice(@Direct _DeviceT device);
+        int sdrplay_api_GetDevices(@Out @Direct DeviceT[] devices, IntByReference numDevs, int maxDevs);
+        int sdrplay_api_SelectDevice(@Direct DeviceT device);
+        int sdrplay_api_ReleaseDevice(@Direct DeviceT device);
         
         int sdrplay_api_DebugEnable(@Direct Pointer dev, int enable);
         int sdrplay_api_Init(@Direct Pointer dev, _CallbackFnsT callbackFns, Pointer cbContext);
@@ -73,32 +75,20 @@ public class JNRMain {
         }
     }
     
-    public static class _DeviceT extends Struct {
-        jnr.ffi.Struct.Unsigned8[] SerNo = array(new Unsigned8[64]);
-        jnr.ffi.Struct.Unsigned8 hwVer = new Unsigned8();
-        Signed32 tuner = new Signed32();
-        Signed32 rspDuoMode = new Signed32();
-        Double rspDuoSampleFreq = new Double();
-        jnr.ffi.Struct.Pointer dev = new Pointer();
-        
-        public _DeviceT(final jnr.ffi.Runtime runtime) {
-            super(runtime);
-        }
-    }
-    
     public static void main(String[] args) {
         _SDRplayAPI API = LibraryLoader.create(_SDRplayAPI.class).load("sdrplay_api");
         jnr.ffi.Runtime runtime = jnr.ffi.Runtime.getRuntime(API);
         
+
         
         // Open and get API
-        int err = API.sdrplay_api_Open();
+        ErrT errorCode = API.sdrplay_api_Open();
         FloatByReference apiVer = new FloatByReference();
-        err = API.sdrplay_api_ApiVersion(apiVer);
+        int err = API.sdrplay_api_ApiVersion(apiVer);
         System.out.println("API: "+ apiVer.floatValue());
         
         // List devices
-        _DeviceT[] devices = Struct.arrayOf(runtime, _DeviceT.class, 1);
+        DeviceT[] devices = Struct.arrayOf(runtime, DeviceT.class, 1);
         IntByReference numDevices = new IntByReference();
         err = API.sdrplay_api_GetDevices(devices, numDevices, 1);
 
