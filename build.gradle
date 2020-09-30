@@ -3,10 +3,14 @@ apply plugin: 'jacoco'
 apply plugin: 'application'
 
 
-mainClassName = 'SDRPlayAPIJava.JNIMain'
+mainClassName = 'SDRPlayAPIJava.JNRMain'
 
 repositories {
     jcenter()
+}
+
+run {
+    systemProperties['jnr.ffi.compile.dump'] = 'true'
 }
 
 dependencies {

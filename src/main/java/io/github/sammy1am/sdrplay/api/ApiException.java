@@ -5,9 +5,10 @@
  */
 package io.github.sammy1am.sdrplay.api;
 
-import io.github.sammy1am.sdrplay.api.SDRPlayAPI.sdrplay_api_DeviceT;
-import io.github.sammy1am.sdrplay.api.SDRPlayAPI.sdrplay_api_ErrT;
-import static io.github.sammy1am.sdrplay.api.SDRPlayAPI.sdrplay_api_ErrT.*;
+import io.github.sammy1am.sdrplay.jna.SDRPlayAPI;
+import io.github.sammy1am.sdrplay.jna.SDRPlayAPI.sdrplay_api_DeviceT;
+import io.github.sammy1am.sdrplay.jna.SDRPlayAPI.sdrplay_api_ErrT;
+import static io.github.sammy1am.sdrplay.jna.SDRPlayAPI.sdrplay_api_ErrT.*;
 
 /**
  *

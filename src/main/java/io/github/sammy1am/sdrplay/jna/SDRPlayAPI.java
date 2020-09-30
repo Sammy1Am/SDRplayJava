@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package io.github.sammy1am.sdrplay.api;
+package io.github.sammy1am.sdrplay.jna;
 
 import com.sun.jna.Callback;
 import com.sun.jna.Library;
@@ -1184,17 +1184,17 @@ public interface SDRPlayAPI extends Library {
     
     //<editor-fold desc="Device Params Structures">
     
-    public class sdrplay_api_DeviceParamsT extends Structure {
-
-        public sdrplay_api_DevParamsT devParams;
-        public sdrplay_api_RxChannelParamsT rxChannelA;
-        public sdrplay_api_RxChannelParamsT rxChannelB;
-
-        @Override
-        protected List<String> getFieldOrder() {
-            return Arrays.asList("devParams", "rxChannelA", "rxChannelB");
-        }
-    }
+//    public class sdrplay_api_DeviceParamsT extends Structure {
+//
+//        public sdrplay_api_DevParamsT devParams;
+//        public sdrplay_api_RxChannelParamsT rxChannelA;
+//        public sdrplay_api_RxChannelParamsT rxChannelB;
+//
+//        @Override
+//        protected List<String> getFieldOrder() {
+//            return Arrays.asList("devParams", "rxChannelA", "rxChannelB");
+//        }
+//    }
     
     //</editor-fold>
     
@@ -1226,7 +1226,7 @@ public interface SDRPlayAPI extends Library {
 
     // Device API function definitions
     sdrplay_api_ErrT        sdrplay_api_DebugEnable(HANDLE dev, sdrplay_api_DbgLvl_t enable); 
-    sdrplay_api_ErrT sdrplay_api_GetDeviceParams(HANDLE dev, sdrplay_api_DeviceParamsT deviceParams); 
+    //sdrplay_api_ErrT sdrplay_api_GetDeviceParams(HANDLE dev, sdrplay_api_DeviceParamsT deviceParams); 
     sdrplay_api_ErrT sdrplay_api_Init(HANDLE dev, sdrplay_api_CallbackFnsT callbackFns, Pointer cbContext); 
     sdrplay_api_ErrT sdrplay_api_Uninit(HANDLE dev);
     sdrplay_api_ErrT sdrplay_api_Update(HANDLE dev, sdrplay_api_TunerSelectT tuner, sdrplay_api_ReasonForUpdateT reasonForUpdate, sdrplay_api_ReasonForUpdateExtension1T reasonForUpdateExt1);

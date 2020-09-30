@@ -3,13 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package io.github.sammy1am.sdrplay.api;
+package io.github.sammy1am.sdrplay.jna;
 
 
 import com.sun.jna.DefaultTypeMapper;
 import com.sun.jna.ToNativeContext;
 import com.sun.jna.platform.EnumConverter;
-import io.github.sammy1am.sdrplay.api.SDRPlayAPI.*;
+import io.github.sammy1am.sdrplay.jna.SDRPlayAPI.*;
 
 /**
  *

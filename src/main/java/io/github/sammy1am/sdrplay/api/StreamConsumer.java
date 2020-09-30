@@ -5,8 +5,9 @@
  */
 package io.github.sammy1am.sdrplay.api;
 
+import io.github.sammy1am.sdrplay.jna.SDRPlayAPI;
 import com.sun.jna.Pointer;
-import io.github.sammy1am.sdrplay.api.SDRPlayAPI.sdrplay_api_StreamCallback_t;
+import io.github.sammy1am.sdrplay.jna.SDRPlayAPI.sdrplay_api_StreamCallback_t;
 
 /**
  *

@@ -11,9 +11,17 @@
 %include cpointer.i
 %pointer_functions(float, floatp);
 %pointer_functions(unsigned int, uintp);
-%pointer_functions(sdrplay_api_CallbackFnsT, callbackFnsp);
 
 %include carrays.i
 %array_class(sdrplay_api_DeviceT, deviceTArray)
+
+%typemap(javacode) HANDLE * %{
+  /** Not recommended, but couldn't find a workaround */
+  public long getPointer() {
+      return swigCPtr;
+  }
+%}
+
+//%typemap(jtype) HANDLE dev "long";
 
 %include "sdrplay_api.h"
