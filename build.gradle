@@ -16,11 +16,6 @@ run {
 dependencies {
     testImplementation     'junit:junit:4.13'
     
-    //SDR Play API
-    api 'net.java.dev.jna:jna:5.6.0'
-    implementation 'net.java.dev.jna:jna-platform:5.6.0'
-    implementation 'com.nativelibs4java:bridj:0.7.0'
-    
+    //SDR Play API  
     implementation 'com.github.jnr:jnr-ffi:2.2.0'
-    
 }
