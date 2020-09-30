@@ -1,9 +1,7 @@
 package io.github.sammy1am.sdrplay;
 
-
-import io.github.sammy1am.sdrplay.jnr.SDRplayAPI.DeviceT;
-import io.github.sammy1am.sdrplay.jnr.SDRplayAPI.ErrT;
-
+import io.github.sammy1am.sdrplay.jnr.SDRplayAPIJNR.DeviceT;
+import io.github.sammy1am.sdrplay.jnr.SDRplayAPIJNR.ErrT;
 
 /**
  * Helper class to wrap SDRplay API error codes into proper Java exceptions.

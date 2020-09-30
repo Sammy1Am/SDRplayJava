@@ -1,9 +1,6 @@
 package io.github.sammy1am.sdrplay.jnr;
 
-import io.github.sammy1am.sdrplay.jnr.TunerParamsT.TunerSelectT;
-import jnr.ffi.LibraryLoader;
 import jnr.ffi.Pointer;
-import jnr.ffi.Runtime;
 import jnr.ffi.Struct;
 import jnr.ffi.annotations.Direct;
 import jnr.ffi.annotations.Out;
@@ -13,41 +10,26 @@ import jnr.ffi.byref.PointerByReference;
 import jnr.ffi.util.EnumMapper;
 
 /**
- * Base JNR wrapper for sdrplay_api.h.
+ * JNR wrapper for sdrplay_api.h
  * @author Sammy1Am
  */
-public class SDRplayAPI {
-    
-    private static final SDRplayAPIJNR API = LibraryLoader.create(SDRplayAPIJNR.class).load("sdrplay_api");
-    private static final Runtime RUNTIME = Runtime.getRuntime(API);
-    
-    public static SDRplayAPIJNR getInstance() {
-        return API;
-    }
-    
-    public static Runtime getRuntime() {
-        return RUNTIME;
-    }
-    
-    public static interface SDRplayAPIJNR {    
-       
-        ErrT sdrplay_api_Open();
-        ErrT sdrplay_api_Close();
-        ErrT sdrplay_api_ApiVersion(@Out FloatByReference apiVer);
-        ErrT sdrplay_api_LockDeviceApi();    
-        ErrT sdrplay_api_UnlockDeviceApi();
-        
-        ErrT sdrplay_api_GetDevices(@Out @Direct DeviceT[] devices, IntByReference numDevs, int maxDevs);
-        ErrT sdrplay_api_SelectDevice(@Direct DeviceT device);
-        ErrT sdrplay_api_ReleaseDevice(@Direct DeviceT device);
-        
-        ErrT sdrplay_api_DebugEnable(@Direct Pointer dev, DbgLvl_t enable);
-        ErrT sdrplay_api_GetDeviceParams(@Direct Pointer dev, @Direct PointerByReference deviceParamsPBR);
-        ErrT sdrplay_api_Init(@Direct Pointer dev, CallbackFnsT callbackFns, Pointer cbContext);
-        ErrT sdrplay_api_Uninit(@Direct Pointer dev);
-        ErrT sdrplay_api_Update(@Direct Pointer dev, TunerSelectT tuner, ReasonForUpdateT reasonForUpdate, ReasonForUpdateExtension1T reasonForUpdateExt1);
-    }
-    
+public interface SDRplayAPIJNR {
+    ErrT sdrplay_api_Open();
+    ErrT sdrplay_api_Close();
+    ErrT sdrplay_api_ApiVersion(@Out FloatByReference apiVer);
+    ErrT sdrplay_api_LockDeviceApi();    
+    ErrT sdrplay_api_UnlockDeviceApi();
+
+    ErrT sdrplay_api_GetDevices(@Out @Direct DeviceT[] devices, IntByReference numDevs, int maxDevs);
+    ErrT sdrplay_api_SelectDevice(@Direct DeviceT device);
+    ErrT sdrplay_api_ReleaseDevice(@Direct DeviceT device);
+
+    ErrT sdrplay_api_DebugEnable(@Direct Pointer dev, DbgLvl_t enable);
+    ErrT sdrplay_api_GetDeviceParams(@Direct Pointer dev, @Direct PointerByReference deviceParamsPBR);
+    ErrT sdrplay_api_Init(@Direct Pointer dev, CallbackFnsT callbackFns, Pointer cbContext);
+    ErrT sdrplay_api_Uninit(@Direct Pointer dev);
+    ErrT sdrplay_api_Update(@Direct Pointer dev, TunerParamsT.TunerSelectT tuner, ReasonForUpdateT reasonForUpdate, ReasonForUpdateExtension1T reasonForUpdateExt1);
+
     public static enum ErrT implements EnumMapper.IntegerEnum {
         Success(0),
         Fail(1),
@@ -195,7 +177,7 @@ public class SDRplayAPI {
         public Struct.Double rspDuoSampleFreq = new Struct.Double();
         public jnr.ffi.Struct.Pointer dev = new Struct.Pointer();
 
-        public DeviceT(final Runtime runtime) {
+        public DeviceT(final jnr.ffi.Runtime runtime) {
             super(runtime);
         }
     }
@@ -207,7 +189,7 @@ public class SDRplayAPI {
         jnr.ffi.Struct.Signed32 line = new jnr.ffi.Struct.Signed32();
         jnr.ffi.Struct.AsciiString message = new jnr.ffi.Struct.AsciiString(1024);
         
-        public ErrorInfoT(final Runtime runtime) {
+        public ErrorInfoT(final jnr.ffi.Runtime runtime) {
             super(runtime);
         }
     }

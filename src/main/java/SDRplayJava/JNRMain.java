@@ -10,12 +10,13 @@ import io.github.sammy1am.sdrplay.jnr.CallbackFnsT;
 import io.github.sammy1am.sdrplay.jnr.CallbackFnsT.EventCallback;
 import io.github.sammy1am.sdrplay.jnr.CallbackFnsT.StreamCallback;
 import io.github.sammy1am.sdrplay.jnr.DeviceParamsT;
-import io.github.sammy1am.sdrplay.jnr.SDRplayAPI;
-import io.github.sammy1am.sdrplay.jnr.SDRplayAPI.DeviceT;
-import io.github.sammy1am.sdrplay.jnr.SDRplayAPI.ErrT;
-import io.github.sammy1am.sdrplay.jnr.SDRplayAPI.ReasonForUpdateExtension1T;
-import io.github.sammy1am.sdrplay.jnr.SDRplayAPI.ReasonForUpdateT;
-import io.github.sammy1am.sdrplay.jnr.SDRplayAPI.SDRplayAPIJNR;
+import io.github.sammy1am.sdrplay.SDRplayAPI;
+import io.github.sammy1am.sdrplay.jnr.SDRplayAPIJNR;
+import io.github.sammy1am.sdrplay.jnr.SDRplayAPIJNR.DbgLvl_t;
+import io.github.sammy1am.sdrplay.jnr.SDRplayAPIJNR.DeviceT;
+import io.github.sammy1am.sdrplay.jnr.SDRplayAPIJNR.ErrT;
+import io.github.sammy1am.sdrplay.jnr.SDRplayAPIJNR.ReasonForUpdateExtension1T;
+import io.github.sammy1am.sdrplay.jnr.SDRplayAPIJNR.ReasonForUpdateT;
 import io.github.sammy1am.sdrplay.jnr.TunerParamsT.TunerSelectT;
 import jnr.ffi.Pointer;
 import jnr.ffi.Struct;
@@ -32,8 +33,8 @@ public class JNRMain {
     
     public static void main(String[] args) {
         
-        SDRplayAPIJNR API = SDRplayAPI.getInstance();
-        jnr.ffi.Runtime runtime = SDRplayAPI.getRuntime();
+        SDRplayAPIJNR API = SDRplayAPI.getJNRInstance();
+        jnr.ffi.Runtime runtime = SDRplayAPI.getJNRRuntime();
         
         // Open and get API
         ErrT err = API.sdrplay_api_Open();
@@ -50,7 +51,7 @@ public class JNRMain {
         err = API.sdrplay_api_SelectDevice(devices[0]);
         
         // Set Debug
-        err = API.sdrplay_api_DebugEnable(devices[0].dev.get(), SDRplayAPI.DbgLvl_t.DbgLvl_Verbose);
+        err = API.sdrplay_api_DebugEnable(devices[0].dev.get(), DbgLvl_t.DbgLvl_Verbose);
         
         // Init device
         CallbackFnsT callbacks = new CallbackFnsT(runtime);
