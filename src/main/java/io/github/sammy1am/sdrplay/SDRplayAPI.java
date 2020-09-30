@@ -1,9 +1,14 @@
 package io.github.sammy1am.sdrplay;
 
 import io.github.sammy1am.sdrplay.jnr.SDRplayAPIJNR;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import jnr.ffi.LibraryLoader;
 import jnr.ffi.Runtime;
+import jnr.ffi.Struct;
 import jnr.ffi.byref.FloatByReference;
+import jnr.ffi.byref.IntByReference;
 
 /**
  * Base JNR wrapper for sdrplay_api.h.
@@ -34,5 +39,28 @@ public class SDRplayAPI {
         FloatByReference apiVer = new FloatByReference();
         ApiException.checkErrorCode(JNRAPI.sdrplay_api_ApiVersion(apiVer));
         return apiVer.floatValue();
+    }
+    
+    public static void LockDeviceApi() {
+        ApiException.checkErrorCode(JNRAPI.sdrplay_api_LockDeviceApi());
+    }
+    
+    public static void UnlockDeviceApi() {
+        ApiException.checkErrorCode(JNRAPI.sdrplay_api_UnlockDeviceApi());
+    }
+    
+    public static List<SDRplayDevice> GetDevices(int maximumDevices) {
+        SDRplayAPIJNR.DeviceT[] devices = Struct.arrayOf(RUNTIME, SDRplayAPIJNR.DeviceT.class, maximumDevices);
+        IntByReference numDevices = new IntByReference();
+        ApiException.checkErrorCode(JNRAPI.sdrplay_api_GetDevices(devices, numDevices, maximumDevices));
+        
+        ArrayList<SDRplayDevice> returnDevices = new ArrayList<>(numDevices.intValue());
+        
+        for (int d=0;d<numDevices.intValue();d++) {
+            // Create a new SDRplayDevice using the native device and add it to the list
+            returnDevices.add(new SDRplayDevice(devices[d]));
+        }
+        
+        return returnDevices;
     }
 }

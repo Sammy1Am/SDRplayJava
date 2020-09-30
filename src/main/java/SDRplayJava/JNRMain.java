@@ -59,21 +59,21 @@ public class JNRMain {
         
         StreamCallback scba =  new StreamCallback() {
             @Override
-            public void call(Pointer xi, Pointer xq, Pointer params, int numSamples, int reset, Pointer cbContext) {
+            public void call(Pointer xi, Pointer xq, CallbackFnsT.StreamCbParamsT params, int numSamples, int reset, Pointer cbContext) {
                 System.out.println("Got A!");
             }
         };
         
         StreamCallback scbb =  new StreamCallback() {
             @Override
-            public void call(Pointer xi, Pointer xq, Pointer params, int numSamples, int reset, Pointer cbContext) {
+            public void call(Pointer xi, Pointer xq, CallbackFnsT.StreamCbParamsT params, int numSamples, int reset, Pointer cbContext) {
                 System.out.println("Got A!");
             }
         };
         
         EventCallback ecb = new EventCallback() {
             @Override
-            public void call(int eventId, int tuner, Pointer params, Pointer cbContext) {
+            public void call(CallbackFnsT.EventT eventId, TunerSelectT tuner, CallbackFnsT.EventParamsT params, jnr.ffi.Pointer cbContext) {
                 System.out.println("Got Event!");
             }
         };
