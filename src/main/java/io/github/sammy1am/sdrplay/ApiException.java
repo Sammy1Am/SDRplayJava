@@ -1,52 +1,15 @@
-package io.github.sammy1am.sdrplay.api;
+package io.github.sammy1am.sdrplay;
 
-import io.github.sammy1am.sdrplay.jnr.DeviceT;
-import jnr.ffi.util.EnumMapper;
+
+import io.github.sammy1am.sdrplay.jnr.SDRplayAPI.DeviceT;
+import io.github.sammy1am.sdrplay.jnr.SDRplayAPI.ErrT;
+
 
 /**
- *
- * @author Sam
+ * Helper class to wrap SDRplay API error codes into proper Java exceptions.
+ * @author Sammy1Am
  */
 public class ApiException extends RuntimeException {
-    
-    public static enum ErrT implements EnumMapper.IntegerEnum {
-        sdrplay_api_Success(0),
-        sdrplay_api_Fail(1),
-        sdrplay_api_InvalidParam(2),
-        sdrplay_api_OutOfRange(3),
-        sdrplay_api_GainUpdateError(4),
-        sdrplay_api_RfUpdateError(5),
-        sdrplay_api_FsUpdateError(6),
-        sdrplay_api_HwError(7),
-        sdrplay_api_AliasingError(8),
-        sdrplay_api_AlreadyInitialised(9),
-        sdrplay_api_NotInitialised(10),
-        sdrplay_api_NotEnabled(11),
-        sdrplay_api_HwVerError(12),
-        sdrplay_api_OutOfMemError(13),
-        sdrplay_api_ServiceNotResponding(14),
-        sdrplay_api_StartPending(15),
-        sdrplay_api_StopPending(16),
-        sdrplay_api_InvalidMode(17),
-        sdrplay_api_FailedVerification1(18),
-        sdrplay_api_FailedVerification2(19),
-        sdrplay_api_FailedVerification3(20),
-        sdrplay_api_FailedVerification4(21),
-        sdrplay_api_FailedVerification5(22),
-        sdrplay_api_FailedVerification6(23),
-        sdrplay_api_InvalidServiceVersion(24);
-
-        private final int val;
-
-        ErrT(int val) {
-            this.val = val;
-        }
-        
-        @Override
-        public int intValue() {
-            return val;
-        }
-    }
     
     private final ErrT errorCode;
     
@@ -64,7 +27,7 @@ public class ApiException extends RuntimeException {
     }
     
     public static void checkErrorCode(ErrT errorCode, DeviceT device) {
-        if (ErrT.sdrplay_api_Success == errorCode) {
+        if (ErrT.Success == errorCode) {
             return; // No error, we're good.
         }
         
@@ -78,53 +41,53 @@ public class ApiException extends RuntimeException {
 //        }
 
         switch(errorCode) {
-            case sdrplay_api_Fail:
+            case Fail:
                 throw new FailException(errorMessage);
-            case sdrplay_api_InvalidParam:
+            case InvalidParam:
                 throw new InvalidParamException(errorMessage);
-            case sdrplay_api_OutOfRange:
+            case OutOfRange:
                 throw new OutOfRangeException(errorMessage);
-            case sdrplay_api_GainUpdateError:
+            case GainUpdateError:
                 throw new GainUpdateErrorException(errorMessage);
-            case sdrplay_api_RfUpdateError:
+            case RfUpdateError:
                 throw new RfUpdateErrorException(errorMessage);
-            case sdrplay_api_FsUpdateError:
+            case FsUpdateError:
                 throw new FsUpdateErrorException(errorMessage);
-            case sdrplay_api_HwError:
+            case HwError:
                 throw new HwErrorException(errorMessage);
-            case sdrplay_api_AliasingError:
+            case AliasingError:
                 throw new AliasingErrorException(errorMessage);
-            case sdrplay_api_AlreadyInitialised:
+            case AlreadyInitialised:
                 throw new AlreadyInitialisedException(errorMessage);
-            case sdrplay_api_NotInitialised:
+            case NotInitialised:
                 throw new NotInitialisedException(errorMessage);
-            case sdrplay_api_NotEnabled:
+            case NotEnabled:
                 throw new NotEnabledException(errorMessage);
-            case sdrplay_api_HwVerError:
+            case HwVerError:
                 throw new HwVerErrorException(errorMessage);
-            case sdrplay_api_OutOfMemError:
+            case OutOfMemError:
                 throw new OutOfMemErrorException(errorMessage);
-            case sdrplay_api_ServiceNotResponding:
+            case ServiceNotResponding:
                 throw new ServiceNotRespondingException(errorMessage);
-            case sdrplay_api_StartPending:
+            case StartPending:
                 throw new StartPendingException(errorMessage);
-            case sdrplay_api_StopPending:
+            case StopPending:
                 throw new StopPendingException(errorMessage);
-            case sdrplay_api_InvalidMode:
+            case InvalidMode:
                 throw new InvalidModeException(errorMessage);
-            case sdrplay_api_FailedVerification1:
+            case FailedVerification1:
                 throw new FailedVerification1Exception(errorMessage);
-            case sdrplay_api_FailedVerification2:
+            case FailedVerification2:
                 throw new FailedVerification2Exception(errorMessage);
-            case sdrplay_api_FailedVerification3:
+            case FailedVerification3:
                 throw new FailedVerification3Exception(errorMessage);
-            case sdrplay_api_FailedVerification4:
+            case FailedVerification4:
                 throw new FailedVerification4Exception(errorMessage);
-            case sdrplay_api_FailedVerification5:
+            case FailedVerification5:
                 throw new FailedVerification5Exception(errorMessage);
-            case sdrplay_api_FailedVerification6:
+            case FailedVerification6:
                 throw new FailedVerification6Exception(errorMessage);
-            case sdrplay_api_InvalidServiceVersion:
+            case InvalidServiceVersion:
                 throw new InvalidServiceVersionException(errorMessage);
             default:
                 throw new ApiException(errorCode, errorMessage);
@@ -133,175 +96,175 @@ public class ApiException extends RuntimeException {
     
     public static class AlreadyInitializedException extends ApiException {
         public AlreadyInitializedException(String message) {
-            super(ErrT.sdrplay_api_AlreadyInitialised, message);
+            super(ErrT.AlreadyInitialised, message);
         }
     }
     
     public static class FailException extends ApiException {
 
         public FailException(String message) {
-            super(ErrT.sdrplay_api_Fail, message);
+            super(ErrT.Fail, message);
         }
     }
 
     public static class InvalidParamException extends ApiException {
 
         public InvalidParamException(String message) {
-            super(ErrT.sdrplay_api_InvalidParam, message);
+            super(ErrT.InvalidParam, message);
         }
     }
 
     public static class OutOfRangeException extends ApiException {
 
         public OutOfRangeException(String message) {
-            super(ErrT.sdrplay_api_OutOfRange, message);
+            super(ErrT.OutOfRange, message);
         }
     }
 
     public static class GainUpdateErrorException extends ApiException {
 
         public GainUpdateErrorException(String message) {
-            super(ErrT.sdrplay_api_GainUpdateError, message);
+            super(ErrT.GainUpdateError, message);
         }
     }
 
     public static class RfUpdateErrorException extends ApiException {
 
         public RfUpdateErrorException(String message) {
-            super(ErrT.sdrplay_api_RfUpdateError, message);
+            super(ErrT.RfUpdateError, message);
         }
     }
 
     public static class FsUpdateErrorException extends ApiException {
 
         public FsUpdateErrorException(String message) {
-            super(ErrT.sdrplay_api_FsUpdateError, message);
+            super(ErrT.FsUpdateError, message);
         }
     }
 
     public static class HwErrorException extends ApiException {
 
         public HwErrorException(String message) {
-            super(ErrT.sdrplay_api_HwError, message);
+            super(ErrT.HwError, message);
         }
     }
 
     public static class AliasingErrorException extends ApiException {
 
         public AliasingErrorException(String message) {
-            super(ErrT.sdrplay_api_AliasingError, message);
+            super(ErrT.AliasingError, message);
         }
     }
 
     public static class AlreadyInitialisedException extends ApiException {
 
         public AlreadyInitialisedException(String message) {
-            super(ErrT.sdrplay_api_AlreadyInitialised, message);
+            super(ErrT.AlreadyInitialised, message);
         }
     }
 
     public static class NotInitialisedException extends ApiException {
 
         public NotInitialisedException(String message) {
-            super(ErrT.sdrplay_api_NotInitialised, message);
+            super(ErrT.NotInitialised, message);
         }
     }
 
     public static class NotEnabledException extends ApiException {
 
         public NotEnabledException(String message) {
-            super(ErrT.sdrplay_api_NotEnabled, message);
+            super(ErrT.NotEnabled, message);
         }
     }
 
     public static class HwVerErrorException extends ApiException {
 
         public HwVerErrorException(String message) {
-            super(ErrT.sdrplay_api_HwVerError, message);
+            super(ErrT.HwVerError, message);
         }
     }
 
     public static class OutOfMemErrorException extends ApiException {
 
         public OutOfMemErrorException(String message) {
-            super(ErrT.sdrplay_api_OutOfMemError, message);
+            super(ErrT.OutOfMemError, message);
         }
     }
 
     public static class ServiceNotRespondingException extends ApiException {
 
         public ServiceNotRespondingException(String message) {
-            super(ErrT.sdrplay_api_ServiceNotResponding, message);
+            super(ErrT.ServiceNotResponding, message);
         }
     }
 
     public static class StartPendingException extends ApiException {
 
         public StartPendingException(String message) {
-            super(ErrT.sdrplay_api_StartPending, message);
+            super(ErrT.StartPending, message);
         }
     }
 
     public static class StopPendingException extends ApiException {
 
         public StopPendingException(String message) {
-            super(ErrT.sdrplay_api_StopPending, message);
+            super(ErrT.StopPending, message);
         }
     }
 
     public static class InvalidModeException extends ApiException {
 
         public InvalidModeException(String message) {
-            super(ErrT.sdrplay_api_InvalidMode, message);
+            super(ErrT.InvalidMode, message);
         }
     }
 
     public static class FailedVerification1Exception extends ApiException {
 
         public FailedVerification1Exception(String message) {
-            super(ErrT.sdrplay_api_FailedVerification1, message);
+            super(ErrT.FailedVerification1, message);
         }
     }
 
     public static class FailedVerification2Exception extends ApiException {
 
         public FailedVerification2Exception(String message) {
-            super(ErrT.sdrplay_api_FailedVerification2, message);
+            super(ErrT.FailedVerification2, message);
         }
     }
 
     public static class FailedVerification3Exception extends ApiException {
 
         public FailedVerification3Exception(String message) {
-            super(ErrT.sdrplay_api_FailedVerification3, message);
+            super(ErrT.FailedVerification3, message);
         }
     }
 
     public static class FailedVerification4Exception extends ApiException {
 
         public FailedVerification4Exception(String message) {
-            super(ErrT.sdrplay_api_FailedVerification4, message);
+            super(ErrT.FailedVerification4, message);
         }
     }
 
     public static class FailedVerification5Exception extends ApiException {
 
         public FailedVerification5Exception(String message) {
-            super(ErrT.sdrplay_api_FailedVerification5, message);
+            super(ErrT.FailedVerification5, message);
         }
     }
 
     public static class FailedVerification6Exception extends ApiException {
 
         public FailedVerification6Exception(String message) {
-            super(ErrT.sdrplay_api_FailedVerification6, message);
+            super(ErrT.FailedVerification6, message);
         }
     }
 
     public static class InvalidServiceVersionException extends ApiException {
 
         public InvalidServiceVersionException(String message) {
-            super(ErrT.sdrplay_api_InvalidServiceVersion, message);
+            super(ErrT.InvalidServiceVersion, message);
         }
     }
 }

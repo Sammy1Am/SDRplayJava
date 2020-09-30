@@ -4,7 +4,7 @@ import jnr.ffi.Struct;
 import jnr.ffi.Runtime;
 
 /**
- *
+ * JNR file containing sdrplay_api_DeviceParamsT and sub-structures (sdrplay_api_dev.h).
  */
 public class DeviceParamsT extends Struct {
     
@@ -15,18 +15,6 @@ public class DeviceParamsT extends Struct {
     public DeviceParamsT(final Runtime runtime) {
         super(runtime);
     }
-    
-//    public DevParamsT getDevParams() {
-//        return (DevParamsT)devParams.get();
-//    }
-//    
-//    public RxChannelParamsT getRcChannelA() {
-//        return (RxChannelParamsT)rxChannelA.get();
-//    }
-//    
-//    public RxChannelParamsT getRcChannelB() {
-//        return (RxChannelParamsT)rxChannelB.get();
-//    }
     
     public static class DevParamsT extends Struct {
 
@@ -74,15 +62,4 @@ public class DeviceParamsT extends Struct {
             tunerParams = inner(new TunerParamsT(runtime));
         }
     }
-    
-    public static class TunerParamsT extends Struct {
-        
-        Unsigned32 bwType;
-        
-        public TunerParamsT(final Runtime runtime) {
-            super(runtime);
-            bwType = new Unsigned32();
-        }
-    }
-    
 }
