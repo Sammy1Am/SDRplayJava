@@ -6,7 +6,10 @@ import io.github.sammy1am.sdrplay.jnr.CallbackFnsT.EventT;
 import io.github.sammy1am.sdrplay.jnr.CallbackFnsT.StreamCbParamsT;
 import io.github.sammy1am.sdrplay.jnr.DeviceParamsT;
 import io.github.sammy1am.sdrplay.jnr.SDRplayAPIJNR;
+import io.github.sammy1am.sdrplay.jnr.SDRplayAPIJNR.DbgLvl_t;
 import io.github.sammy1am.sdrplay.jnr.SDRplayAPIJNR.DeviceT;
+import io.github.sammy1am.sdrplay.jnr.SDRplayAPIJNR.ReasonForUpdateExtension1T;
+import io.github.sammy1am.sdrplay.jnr.SDRplayAPIJNR.ReasonForUpdateT;
 import io.github.sammy1am.sdrplay.jnr.TunerParamsT.TunerSelectT;
 import jnr.ffi.Pointer;
 import jnr.ffi.byref.PointerByReference;
@@ -130,6 +133,10 @@ public class SDRplayDevice {
         streamsReceiver = sr;
     }
     
+    public void debugEnable(DbgLvl_t debugLevel) {
+        ApiException.checkErrorCode(JNRAPI.sdrplay_api_DebugEnable(nativeDevice.dev.get(), debugLevel));
+    }
+    
     public void init() {
         if (!isSelected) {throw new RuntimeException("Device must be selected first!");}
         ApiException.checkErrorCode(JNRAPI.sdrplay_api_Init(nativeDevice.dev.get(), callbacks, null));
@@ -147,6 +154,32 @@ public class SDRplayDevice {
      * the most used ones will be added first.
      */
     
-    //public 
+    private void doUpdate(ReasonForUpdateT reason) {
+        ApiException.checkErrorCode(JNRAPI.sdrplay_api_Update(nativeDevice.dev.get(), 
+                TunerSelectT.Tuner_A, // TODO: assume TunerA here for now-- maybe get this from nativeDevice?
+                reason, 
+                ReasonForUpdateExtension1T.Update_Ext1_None));
+    }
     
+    /**
+     * 
+     * @return Sample rate in Hz
+     */
+    public double getSampleRate() {
+        return nativeParams.devParams.get().fsFreq.fsHz.get();
+    }
+    
+    public void setSampleRate(double newSampleRate) {
+        nativeParams.devParams.get().fsFreq.fsHz.set(newSampleRate);
+        doUpdate(ReasonForUpdateT.Update_Dev_Fs);
+    }
+    
+    public double getPPM() {
+        return nativeParams.devParams.get().ppm.get();
+    }
+    
+    public void setPPM(double newPPM) {
+        nativeParams.devParams.get().ppm.set(newPPM);
+        doUpdate(ReasonForUpdateT.Update_Dev_Ppm);
+    }
 }
