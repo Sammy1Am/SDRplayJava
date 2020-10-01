@@ -7,7 +7,6 @@ import io.github.sammy1am.sdrplay.jnr.CallbackFnsT.StreamCbParamsT;
 import io.github.sammy1am.sdrplay.jnr.DeviceParamsT;
 import io.github.sammy1am.sdrplay.jnr.SDRplayAPIJNR;
 import io.github.sammy1am.sdrplay.jnr.SDRplayAPIJNR.DeviceT;
-import io.github.sammy1am.sdrplay.jnr.TunerParamsT;
 import io.github.sammy1am.sdrplay.jnr.TunerParamsT.TunerSelectT;
 import jnr.ffi.Pointer;
 import jnr.ffi.byref.PointerByReference;
@@ -38,24 +37,35 @@ public class SDRplayDevice {
     CallbackFnsT.StreamCallback scba =  new CallbackFnsT.StreamCallback() {
         @Override
         public void call(Pointer xi, Pointer xq, StreamCbParamsT params, int numSamples, int reset, Pointer cbContext) {
-            System.out.println("DS A");
-            //streamsReceiver.receiveStreamA(xi, xq, params, numSamples, reset);
+            //TODO: There's probably a more efficient way to do this, but try this for now (as long as performance allows)
+            short[] ia = new short[numSamples];
+            short[] qa = new short[numSamples];
+            xi.get(0, ia, 0, numSamples);
+            xq.get(0, qa, 0, numSamples);
+            
+            
+            streamsReceiver.receiveStreamA(ia, qa, params, numSamples, reset);
         }
     };
 
     CallbackFnsT.StreamCallback scbb =  new CallbackFnsT.StreamCallback() {
         @Override
         public void call(Pointer xi, Pointer xq, StreamCbParamsT params, int numSamples, int reset, Pointer cbContext) {
-            System.out.println("DS B");
-            //streamsReceiver.receiveStreamB(xi, xq, params, numSamples, reset);
+            //TODO: There's probably a more efficient way to do this, but try this for now (as long as performance allows)
+            short[] ia = new short[numSamples];
+            short[] qa = new short[numSamples];
+            xi.get(0, ia, 0, numSamples);
+            xq.get(0, qa, 0, numSamples);
+            
+            
+            streamsReceiver.receiveStreamB(ia, qa, params, numSamples, reset);
         }
     };
 
     CallbackFnsT.EventCallback ecb = new CallbackFnsT.EventCallback() {
         @Override
         public void call(EventT eventId, TunerSelectT tuner, EventParamsT params, Pointer cbContext) {
-            System.out.println("DE");
-            //streamsReceiver.receiveEvent(eventId, TunerParamsT.TunerSelectT.Tuner_A, params);
+            streamsReceiver.receiveEvent(eventId, tuner, params);
         }
     };
     
@@ -76,6 +86,18 @@ public class SDRplayDevice {
         callbacks.EventCbFn.set(ecb);
     }
     
+    public String getSerialNumber() {
+        return nativeDevice.SerNo.get();
+    }
+    
+    public byte getHWVer() {
+        return nativeDevice.hwVer.byteValue();
+    }
+    
+    public TunerSelectT getTunerSelect() {
+        return nativeDevice.tuner.get();
+    }
+    
     public void select() {
         try {
             // Select the device in the API
@@ -92,9 +114,10 @@ public class SDRplayDevice {
         } catch (ApiException ae) {
             try {
                 release(); // If we failed to select, at least try to release
-            } finally {
-                throw ae;
+            } catch (ApiException releaseException) {
+                // Don't worry about this
             }
+            throw ae;
         }
     }
     
@@ -106,4 +129,24 @@ public class SDRplayDevice {
     public void setStreamsReceiver(StreamsReceiver sr) {
         streamsReceiver = sr;
     }
+    
+    public void init() {
+        if (!isSelected) {throw new RuntimeException("Device must be selected first!");}
+        ApiException.checkErrorCode(JNRAPI.sdrplay_api_Init(nativeDevice.dev.get(), callbacks, null));
+    }
+    
+    public void uninit() {
+        ApiException.checkErrorCode(JNRAPI.sdrplay_api_Uninit(nativeDevice.dev.get()));
+    }
+    
+    
+    /*******************
+     * DEVICE PARAMETERS
+     * *****************
+     * Methods to get and set device parameters.  There are a lot of these, so 
+     * the most used ones will be added first.
+     */
+    
+    //public 
+    
 }

@@ -33,6 +33,10 @@ public class TunerParamsT extends Struct{
             this.val = val;
         }
         
+        public static final TunerSelectT valueOf(int pattern) {
+            return (TunerSelectT)EnumMapper.getInstance(TunerSelectT.class).valueOf(pattern);
+        }
+        
         @Override
         public int intValue() {
             return val;

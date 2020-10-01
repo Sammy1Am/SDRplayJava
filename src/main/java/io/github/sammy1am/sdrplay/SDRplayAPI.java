@@ -41,15 +41,15 @@ public class SDRplayAPI {
         return apiVer.floatValue();
     }
     
-    public static void LockDeviceApi() {
+    public static void lockDeviceApi() {
         ApiException.checkErrorCode(JNRAPI.sdrplay_api_LockDeviceApi());
     }
     
-    public static void UnlockDeviceApi() {
+    public static void unlockDeviceApi() {
         ApiException.checkErrorCode(JNRAPI.sdrplay_api_UnlockDeviceApi());
     }
     
-    public static List<SDRplayDevice> GetDevices(int maximumDevices) {
+    public static List<SDRplayDevice> getDevices(int maximumDevices) {
         SDRplayAPIJNR.DeviceT[] devices = Struct.arrayOf(RUNTIME, SDRplayAPIJNR.DeviceT.class, maximumDevices);
         IntByReference numDevices = new IntByReference();
         ApiException.checkErrorCode(JNRAPI.sdrplay_api_GetDevices(devices, numDevices, maximumDevices));

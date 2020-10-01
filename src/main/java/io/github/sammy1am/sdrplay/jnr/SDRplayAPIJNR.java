@@ -1,5 +1,6 @@
 package io.github.sammy1am.sdrplay.jnr;
 
+import io.github.sammy1am.sdrplay.jnr.TunerParamsT.TunerSelectT;
 import jnr.ffi.Pointer;
 import jnr.ffi.Struct;
 import jnr.ffi.annotations.Direct;
@@ -14,6 +15,9 @@ import jnr.ffi.util.EnumMapper;
  * @author Sammy1Am
  */
 public interface SDRplayAPIJNR {
+    public static final int SDRPLAY_MAX_SER_NO_LEN = 64;
+    
+    
     ErrT sdrplay_api_Open();
     ErrT sdrplay_api_Close();
     ErrT sdrplay_api_ApiVersion(@Out FloatByReference apiVer);
@@ -170,9 +174,9 @@ public interface SDRplayAPIJNR {
     }
     
     public static class DeviceT extends Struct {
-        public jnr.ffi.Struct.Unsigned8[] SerNo = array(new Struct.Unsigned8[64]);
+        public Struct.AsciiString SerNo = new Struct.AsciiString(64);
         public jnr.ffi.Struct.Unsigned8 hwVer = new Struct.Unsigned8();
-        public Struct.Signed32 tuner = new Struct.Signed32();
+        public Struct.Enum<TunerSelectT> tuner = new Struct.Enum<>(TunerSelectT.class);
         public Struct.Signed32 rspDuoMode = new Struct.Signed32();
         public Struct.Double rspDuoSampleFreq = new Struct.Double();
         public jnr.ffi.Struct.Pointer dev = new Struct.Pointer();

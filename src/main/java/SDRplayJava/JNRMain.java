@@ -11,6 +11,7 @@ import io.github.sammy1am.sdrplay.jnr.CallbackFnsT.EventCallback;
 import io.github.sammy1am.sdrplay.jnr.CallbackFnsT.StreamCallback;
 import io.github.sammy1am.sdrplay.jnr.DeviceParamsT;
 import io.github.sammy1am.sdrplay.SDRplayAPI;
+import io.github.sammy1am.sdrplay.jnr.CallbackFnsT.StreamCbParamsT;
 import io.github.sammy1am.sdrplay.jnr.SDRplayAPIJNR;
 import io.github.sammy1am.sdrplay.jnr.SDRplayAPIJNR.DbgLvl_t;
 import io.github.sammy1am.sdrplay.jnr.SDRplayAPIJNR.DeviceT;
@@ -59,14 +60,14 @@ public class JNRMain {
         
         StreamCallback scba =  new StreamCallback() {
             @Override
-            public void call(Pointer xi, Pointer xq, CallbackFnsT.StreamCbParamsT params, int numSamples, int reset, Pointer cbContext) {
+            public void call(Pointer xi, Pointer xq, StreamCbParamsT params, int numSamples, int reset, Pointer cbContext) {
                 System.out.println("Got A!");
             }
         };
         
         StreamCallback scbb =  new StreamCallback() {
             @Override
-            public void call(Pointer xi, Pointer xq, CallbackFnsT.StreamCbParamsT params, int numSamples, int reset, Pointer cbContext) {
+            public void call(Pointer xi, Pointer xq, StreamCbParamsT params, int numSamples, int reset, Pointer cbContext) {
                 System.out.println("Got A!");
             }
         };

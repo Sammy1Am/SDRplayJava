@@ -5,6 +5,7 @@
  */
 package io.github.sammy1am.sdrplay.jnr;
 
+import io.github.sammy1am.sdrplay.SDRplayAPI;
 import io.github.sammy1am.sdrplay.jnr.TunerParamsT.TunerSelectT;
 import jnr.ffi.annotations.Delegate;
 import jnr.ffi.Struct;
@@ -21,18 +22,36 @@ public class CallbackFnsT extends BaseStruct {
     public final Func<StreamCallback> StreamACbFn = func(StreamCallback.class);
     public final Func<StreamCallback> StreamBCbFn = func(StreamCallback.class);
     public final Func<EventCallback> EventCbFn = func(EventCallback.class);
-
+    
     public CallbackFnsT(final jnr.ffi.Runtime runtime) {
         super(runtime);
     }
     
+    // TODO Explicitly converting pointers to structs here-- not sure if this is most efficient
     public static interface StreamCallback {
         @Delegate
+        default public void call(jnr.ffi.Pointer xi, jnr.ffi.Pointer xq, jnr.ffi.Pointer params, int numSamples, int reset, jnr.ffi.Pointer cbContext){
+            StreamCbParamsT paramsStruct = new StreamCbParamsT(SDRplayAPI.getJNRRuntime());
+            paramsStruct.useMemory(params);
+            
+            call(xi, xq, paramsStruct, numSamples,reset,cbContext);
+        }
+        
         public void call(jnr.ffi.Pointer xi, jnr.ffi.Pointer xq, StreamCbParamsT params, int numSamples, int reset, jnr.ffi.Pointer cbContext);
     }
 
     public static interface EventCallback {
         @Delegate
+        default public void call(int eventId, int tuner, jnr.ffi.Pointer params, jnr.ffi.Pointer cbContext) {
+            EventParamsT paramsStruct = new EventParamsT(SDRplayAPI.getJNRRuntime());
+            paramsStruct.useMemory(params);
+            
+            call(EventT.valueOf(eventId),
+                    TunerSelectT.valueOf(tuner),
+                    paramsStruct,
+                    cbContext);
+        };
+        
         public void call(EventT eventId, TunerSelectT tuner, EventParamsT params, jnr.ffi.Pointer cbContext);
     }
     
@@ -83,6 +102,10 @@ public class CallbackFnsT extends BaseStruct {
 
         EventT(int val) {
             this.val = val;
+        }
+        
+        public static final EventT valueOf(int pattern) {
+            return (EventT)EnumMapper.getInstance(EventT.class).valueOf(pattern);
         }
         
         @Override
