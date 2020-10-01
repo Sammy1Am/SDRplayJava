@@ -12,7 +12,7 @@ import jnr.ffi.Struct;
  * @author Sammy1Am
  */
 public class ControlParamsT extends Struct {
-    
+    // TODO
     
     public ControlParamsT(final jnr.ffi.Runtime runtime) {
         super(runtime);

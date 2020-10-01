@@ -10,6 +10,10 @@ import io.github.sammy1am.sdrplay.jnr.SDRplayAPIJNR.DbgLvl_t;
 import io.github.sammy1am.sdrplay.jnr.SDRplayAPIJNR.DeviceT;
 import io.github.sammy1am.sdrplay.jnr.SDRplayAPIJNR.ReasonForUpdateExtension1T;
 import io.github.sammy1am.sdrplay.jnr.SDRplayAPIJNR.ReasonForUpdateT;
+import io.github.sammy1am.sdrplay.jnr.TunerParamsT;
+import io.github.sammy1am.sdrplay.jnr.TunerParamsT.Bw_MHzT;
+import io.github.sammy1am.sdrplay.jnr.TunerParamsT.If_kHzT;
+import io.github.sammy1am.sdrplay.jnr.TunerParamsT.LoModeT;
 import io.github.sammy1am.sdrplay.jnr.TunerParamsT.TunerSelectT;
 import jnr.ffi.Pointer;
 import jnr.ffi.byref.PointerByReference;
@@ -181,5 +185,46 @@ public class SDRplayDevice {
     public void setPPM(double newPPM) {
         nativeParams.devParams.get().ppm.set(newPPM);
         doUpdate(ReasonForUpdateT.Update_Dev_Ppm);
+    }
+    
+    // TODO: All of these assume TunerA, but for a dual tuner would need to specify
+    // Made create a Tuner object that Devices can contain up to two of??
+    
+    public Bw_MHzT getBwType() {
+        return nativeParams.rxChannelA.get().tunerParams.bwType.get();
+    }
+    
+    public void setBwType(Bw_MHzT newBwType) {
+        nativeParams.rxChannelA.get().tunerParams.bwType.set(newBwType);
+        doUpdate(ReasonForUpdateT.Update_Tuner_BwType);
+    }
+    
+    public If_kHzT getIfType() {
+        return nativeParams.rxChannelA.get().tunerParams.ifType.get();
+    }
+    
+    public void setIfType(If_kHzT newIfType) {
+        nativeParams.rxChannelA.get().tunerParams.ifType.set(newIfType);
+        doUpdate(ReasonForUpdateT.Update_Tuner_IfType);
+    }
+    
+    public LoModeT getLoMode() {
+        return nativeParams.rxChannelA.get().tunerParams.loMode.get();
+    }
+    
+    public void setLoMode(LoModeT newLoMode) {
+        nativeParams.rxChannelA.get().tunerParams.loMode.set(newLoMode);
+        doUpdate(ReasonForUpdateT.Update_Tuner_LoMode);
+    }
+    
+    // TODO: Gain stuff
+    
+    public double getRfHz() {
+        return nativeParams.rxChannelA.get().tunerParams.rfFreq.rfHz.get();
+    }
+    
+    public void setRfHz(double newRfHz) {
+        nativeParams.rxChannelA.get().tunerParams.rfFreq.rfHz.set(newRfHz);
+        doUpdate(ReasonForUpdateT.Update_Tuner_Frf);
     }
 }
