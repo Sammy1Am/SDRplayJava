@@ -68,4 +68,25 @@ public class SDRplayAPI {
         
         return returnDevices;
     }
+    
+    public static enum HWModel {
+        UNKNOWN(-1),
+        RSP1(1),
+        RSP1A(255),
+        RSP2(2),
+        RSPduo(3),
+        RSPdx(4);
+        
+        private final int val;
+        
+        HWModel(int val) {
+            this.val = val;
+        }
+        
+        public static HWModel valueOf(int val) {
+            return Arrays.stream(values())
+                    .filter(hwModel -> hwModel.val == val)
+                    .findFirst().orElse(HWModel.UNKNOWN);
+        }
+    }
 }

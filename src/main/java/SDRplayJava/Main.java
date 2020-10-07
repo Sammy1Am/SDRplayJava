@@ -23,7 +23,7 @@ public class Main {
         SDRplayDevice dev = devices.get(0);
         
         dev.select(); // Select device
-        System.out.printf("Selected hwVer:%s serial:%s%n", dev.getHWVer(), dev.getSerialNumber());
+        System.out.printf("Selected hwVer:%s serial:%s%n", dev.getHWModel(), dev.getSerialNumber());
         
         SDRplayAPI.unlockDeviceApi(); // Unlock now that we've selected
         

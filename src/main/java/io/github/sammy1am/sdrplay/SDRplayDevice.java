@@ -1,6 +1,7 @@
 package io.github.sammy1am.sdrplay;
 
 import io.github.sammy1am.sdrplay.ApiException.NotInitialisedException;
+import io.github.sammy1am.sdrplay.SDRplayAPI.HWModel;
 import io.github.sammy1am.sdrplay.jnr.CallbackFnsT;
 import io.github.sammy1am.sdrplay.jnr.CallbackFnsT.EventParamsT;
 import io.github.sammy1am.sdrplay.jnr.CallbackFnsT.EventT;
@@ -104,8 +105,8 @@ public class SDRplayDevice {
         return nativeDevice.SerNo.get();
     }
     
-    public byte getHWVer() {
-        return nativeDevice.hwVer.byteValue();
+    public HWModel getHWModel() {
+        return HWModel.valueOf((int)nativeDevice.hwVer.byteValue());
     }
     
     public TunerSelectT getTunerSelect() {
