@@ -45,7 +45,7 @@ public class DeviceParamsT extends Struct {
         }
     }
     
-    public static enum TransferModeT implements EnumMapper.IntegerEnum {
+    public static enum TransferModeT {
         ISOCH(0),
         BULK(1);
 
@@ -55,7 +55,6 @@ public class DeviceParamsT extends Struct {
             this.val = val;
         }
         
-        @Override
         public int intValue() {
             return val;
         }

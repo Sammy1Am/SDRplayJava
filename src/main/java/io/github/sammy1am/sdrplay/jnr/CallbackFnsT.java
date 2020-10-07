@@ -55,7 +55,7 @@ public class CallbackFnsT extends BaseStruct {
         public void call(EventT eventId, TunerSelectT tuner, EventParamsT params, jnr.ffi.Pointer cbContext);
     }
     
-    public static enum PowerOverloadCbEventIdT implements EnumMapper.IntegerEnum {
+    public static enum PowerOverloadCbEventIdT {
         Overload_Detected(0),
         Overload_Corrected(1);
 
@@ -65,13 +65,12 @@ public class CallbackFnsT extends BaseStruct {
             this.val = val;
         }
         
-        @Override
         public int intValue() {
             return val;
         }
     }
     
-    public static enum RspDuoModeCbEventIdT implements EnumMapper.IntegerEnum {
+    public static enum RspDuoModeCbEventIdT {
         MasterInitialised     (0),
         SlaveAttached         (1),
         SlaveDetached         (2),
@@ -86,13 +85,12 @@ public class CallbackFnsT extends BaseStruct {
             this.val = val;
         }
         
-        @Override
         public int intValue() {
             return val;
         }
     }
     
-    public static enum EventT implements EnumMapper.IntegerEnum {
+    public static enum EventT {
         GainChange(0),
         PowerOverloadChange(1),
         DeviceRemoved(2),
@@ -108,7 +106,6 @@ public class CallbackFnsT extends BaseStruct {
             return (EventT)EnumMapper.getInstance(EventT.class).valueOf(pattern);
         }
         
-        @Override
         public int intValue() {
             return val;
         }

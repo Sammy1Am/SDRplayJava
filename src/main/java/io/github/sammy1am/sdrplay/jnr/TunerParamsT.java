@@ -31,7 +31,7 @@ public class TunerParamsT extends Struct{
         dcOffsetTuner = inner(new DcOffsetTunerT(runtime));
     }
     
-    public static enum Bw_MHzT implements EnumMapper.IntegerEnum {
+    public static enum Bw_MHzT {
         BW_Undefined(0),
         BW_0_200    (200),
         BW_0_300    (300),
@@ -52,13 +52,12 @@ public class TunerParamsT extends Struct{
             return (Bw_MHzT)EnumMapper.getInstance(Bw_MHzT.class).valueOf(pattern);
         }
         
-        @Override
         public int intValue() {
             return val;
         }
     }
     
-    public static enum If_kHzT implements EnumMapper.IntegerEnum {
+    public static enum If_kHzT {
         IF_Undefined (-1),
         IF_Zero      (0),
         IF_0_450     (450),
@@ -75,13 +74,12 @@ public class TunerParamsT extends Struct{
             return (If_kHzT)EnumMapper.getInstance(If_kHzT.class).valueOf(pattern);
         }
         
-        @Override
         public int intValue() {
             return val;
         }
     }
     
-    public static enum LoModeT implements EnumMapper.IntegerEnum {
+    public static enum LoModeT {
         LO_Undefined(0),
         LO_Auto     (1),
         LO_120MHz   (2),
@@ -98,13 +96,12 @@ public class TunerParamsT extends Struct{
             return (LoModeT)EnumMapper.getInstance(LoModeT.class).valueOf(pattern);
         }
         
-        @Override
         public int intValue() {
             return val;
         }
     }
     
-    public static enum MinGainReductionT implements EnumMapper.IntegerEnum {
+    public static enum MinGainReductionT {
         EXTENDED_MIN_GR(0),
         NORMAL_MIN_GR  (20);
 
@@ -118,13 +115,12 @@ public class TunerParamsT extends Struct{
             return (MinGainReductionT)EnumMapper.getInstance(MinGainReductionT.class).valueOf(pattern);
         }
         
-        @Override
         public int intValue() {
             return val;
         }
     }
     
-    public static enum TunerSelectT implements EnumMapper.IntegerEnum {
+    public static enum TunerSelectT {
         Tuner_Neither(0),
         Tuner_A(1),
         Tuner_B(2),
@@ -140,7 +136,6 @@ public class TunerParamsT extends Struct{
             return (TunerSelectT)EnumMapper.getInstance(TunerSelectT.class).valueOf(pattern);
         }
         
-        @Override
         public int intValue() {
             return val;
         }
