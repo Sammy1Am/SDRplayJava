@@ -12,7 +12,7 @@ import io.github.sammy1am.sdrplay.jnr.TunerParamsT.TunerSelectT;
 public interface StreamsReceiver {
     default public void receiveStreamA(short[] xi, short[] xq, StreamCbParamsT params, int numSamples, int reset){};
     default public void receiveStreamB(short[] xi, short[] xq, StreamCbParamsT params, int numSamples, int reset){};
-    default public void receiveEvent(EventT eventId, TunerSelectT tuner, EventParamsT params){};
+    default public void receiveEvent(EventT eventId, TunerSelectT tuner, EventParameters params){};
     
     /** Consumes streams but does nothing with them */
     public static StreamsReceiver NULL_RECEIVER = new StreamsReceiver() {

@@ -115,30 +115,42 @@ public class CallbackFnsT extends BaseStruct {
     }
     
     public static class GainCbParamT extends Struct {
-        //TODO
+        public Unsigned32 gRdB = new Unsigned32();
+        public Unsigned32 lnaGRdb = new Unsigned32();
+        public Double currGain = new Double();
+        
         public GainCbParamT(final jnr.ffi.Runtime runtime) {
             super(runtime);
         }
     }
     
     public static class PowerOverloadCbParamT extends Struct {
-        //TODO
+        public Enum<PowerOverloadCbEventIdT> powerOverloadChangeType = new Enum<>(PowerOverloadCbEventIdT.class);
+        
         public PowerOverloadCbParamT(final jnr.ffi.Runtime runtime) {
             super(runtime);
         }
     }
     
     public static class RspDuoModeCbParamT extends Struct {
-        //TODO
+        public Enum<RspDuoModeCbEventIdT> modeChangeType = new Enum<>(RspDuoModeCbEventIdT.class);
+        
         public RspDuoModeCbParamT(final jnr.ffi.Runtime runtime) {
             super(runtime);
         }
     }
     
     public static class EventParamsT extends Union {
-        //TODO
+        public GainCbParamT gainParams;
+        public PowerOverloadCbParamT powerOverloadParams;
+        public RspDuoModeCbParamT rspDuoModeParams;
+        
         public EventParamsT(final jnr.ffi.Runtime runtime) {
             super(runtime);
+            
+            gainParams = inner(new GainCbParamT(runtime));
+            powerOverloadParams = inner(new PowerOverloadCbParamT(runtime));
+            rspDuoModeParams = inner(new RspDuoModeCbParamT(runtime));
         }
     }
     

@@ -74,7 +74,7 @@ public class SDRplayDevice {
     CallbackFnsT.EventCallback ecb = new CallbackFnsT.EventCallback() {
         @Override
         public void call(EventT eventId, TunerSelectT tuner, EventParamsT params, Pointer cbContext) {
-            streamsReceiver.receiveEvent(eventId, tuner, params);
+            streamsReceiver.receiveEvent(eventId, tuner, new EventParameters(params));
         }
     };
     
@@ -240,5 +240,9 @@ public class SDRplayDevice {
     public void setRfHz(double newRfHz) {
         nativeParams.rxChannelA.get().tunerParams.rfFreq.rfHz.set(newRfHz);
         if (isInitialized) doUpdate(ReasonForUpdateT.Update_Tuner_Frf);
+    }
+
+    public void acknowledgeOverload() {
+        if (isInitialized) doUpdate(ReasonForUpdateT.Update_Ctrl_OverloadMsgAck);
     }
 }
