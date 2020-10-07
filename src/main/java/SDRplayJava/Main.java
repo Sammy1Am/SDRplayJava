@@ -4,9 +4,7 @@ import io.github.sammy1am.sdrplay.SDRplayAPI;
 import io.github.sammy1am.sdrplay.SDRplayDevice;
 import java.util.List;
 import io.github.sammy1am.sdrplay.StreamsReceiver;
-import io.github.sammy1am.sdrplay.jnr.CallbackFnsT;
 import io.github.sammy1am.sdrplay.jnr.CallbackFnsT.StreamCbParamsT;
-import jnr.ffi.Pointer;
 
 /**
  * Basic sanity check for Java API.

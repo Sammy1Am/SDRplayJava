@@ -27,6 +27,8 @@ public interface SDRplayAPIJNR {
     ErrT sdrplay_api_GetDevices(@Out @Direct DeviceT[] devices, IntByReference numDevs, int maxDevs);
     ErrT sdrplay_api_SelectDevice(@Direct DeviceT device);
     ErrT sdrplay_api_ReleaseDevice(@Direct DeviceT device);
+    
+    String sdrplay_api_GetErrorString(ErrT err);
 
     ErrT sdrplay_api_DebugEnable(@Direct Pointer dev, DbgLvl_t enable);
     ErrT sdrplay_api_GetDeviceParams(@Direct Pointer dev, @Direct PointerByReference deviceParamsPBR);

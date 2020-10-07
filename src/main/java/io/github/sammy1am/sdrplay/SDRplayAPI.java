@@ -1,6 +1,7 @@
 package io.github.sammy1am.sdrplay;
 
 import io.github.sammy1am.sdrplay.jnr.SDRplayAPIJNR;
+import io.github.sammy1am.sdrplay.jnr.SDRplayAPIJNR.ErrT;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -39,6 +40,10 @@ public class SDRplayAPI {
         FloatByReference apiVer = new FloatByReference();
         ApiException.checkErrorCode(JNRAPI.sdrplay_api_ApiVersion(apiVer));
         return apiVer.floatValue();
+    }
+    
+    public static String getErrorString(ErrT errorCode) {
+        return JNRAPI.sdrplay_api_GetErrorString(errorCode);
     }
     
     public static void lockDeviceApi() {

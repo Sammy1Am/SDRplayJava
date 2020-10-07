@@ -29,14 +29,14 @@ public class ApiException extends RuntimeException {
             return; // No error, we're good.
         }
         
-        String errorMessage = ""; // TODO fill this out
-        String additionalInfo = ""; //TODO Get additional error info from API
+        String errorMessage;
+        String additionalInfo = ""; //TODO Get additional error info from GetLastError API
         
-//        try {
-//            errorMessage = SDRPlayAPI.INSTANCE.sdrplay_api_GetErrorString(errorCode);
-//        } catch (Exception ex) {
-//            errorMessage = "No Description Available";
-//        }
+        try {
+            errorMessage = SDRplayAPI.getErrorString(errorCode);
+        } catch (Exception ex) {
+            errorMessage = "No Description Available";
+        }
 
         switch(errorCode) {
             case Fail:

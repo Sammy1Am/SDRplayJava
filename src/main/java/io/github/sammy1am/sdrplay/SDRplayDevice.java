@@ -1,5 +1,6 @@
 package io.github.sammy1am.sdrplay;
 
+import io.github.sammy1am.sdrplay.ApiException.NotInitialisedException;
 import io.github.sammy1am.sdrplay.jnr.CallbackFnsT;
 import io.github.sammy1am.sdrplay.jnr.CallbackFnsT.EventParamsT;
 import io.github.sammy1am.sdrplay.jnr.CallbackFnsT.EventT;
@@ -82,6 +83,12 @@ public class SDRplayDevice {
     private boolean isSelected = false;
     
     /**
+     * Has this device been initialized.  Used to determine if update() needs to be
+     * called after settings changes or not.
+     */
+    private boolean isInitialized = false;
+    
+    /**
      * Creates a friendly Java wrapper around an SDRplay API device.
      * @param nativeDevice Native representation of the DeviceT struct.
      */
@@ -144,10 +151,16 @@ public class SDRplayDevice {
     public void init() {
         if (!isSelected) {throw new RuntimeException("Device must be selected first!");}
         ApiException.checkErrorCode(JNRAPI.sdrplay_api_Init(nativeDevice.dev.get(), callbacks, null));
+        isInitialized = true;
     }
     
     public void uninit() {
-        ApiException.checkErrorCode(JNRAPI.sdrplay_api_Uninit(nativeDevice.dev.get()));
+        try {
+            ApiException.checkErrorCode(JNRAPI.sdrplay_api_Uninit(nativeDevice.dev.get()));
+            isInitialized = false;
+        } catch (NotInitialisedException nie) {
+            // Well fine, that's what we wanted anyway.
+        }
     }
     
     
@@ -175,7 +188,7 @@ public class SDRplayDevice {
     
     public void setSampleRate(double newSampleRate) {
         nativeParams.devParams.get().fsFreq.fsHz.set(newSampleRate);
-        doUpdate(ReasonForUpdateT.Update_Dev_Fs);
+        if (isInitialized) doUpdate(ReasonForUpdateT.Update_Dev_Fs);
     }
     
     public double getPPM() {
@@ -184,7 +197,7 @@ public class SDRplayDevice {
     
     public void setPPM(double newPPM) {
         nativeParams.devParams.get().ppm.set(newPPM);
-        doUpdate(ReasonForUpdateT.Update_Dev_Ppm);
+        if (isInitialized) doUpdate(ReasonForUpdateT.Update_Dev_Ppm);
     }
     
     // TODO: All of these assume TunerA, but for a dual tuner would need to specify
@@ -196,7 +209,7 @@ public class SDRplayDevice {
     
     public void setBwType(Bw_MHzT newBwType) {
         nativeParams.rxChannelA.get().tunerParams.bwType.set(newBwType);
-        doUpdate(ReasonForUpdateT.Update_Tuner_BwType);
+        if (isInitialized) doUpdate(ReasonForUpdateT.Update_Tuner_BwType);
     }
     
     public If_kHzT getIfType() {
@@ -205,7 +218,7 @@ public class SDRplayDevice {
     
     public void setIfType(If_kHzT newIfType) {
         nativeParams.rxChannelA.get().tunerParams.ifType.set(newIfType);
-        doUpdate(ReasonForUpdateT.Update_Tuner_IfType);
+        if (isInitialized) doUpdate(ReasonForUpdateT.Update_Tuner_IfType);
     }
     
     public LoModeT getLoMode() {
@@ -214,7 +227,7 @@ public class SDRplayDevice {
     
     public void setLoMode(LoModeT newLoMode) {
         nativeParams.rxChannelA.get().tunerParams.loMode.set(newLoMode);
-        doUpdate(ReasonForUpdateT.Update_Tuner_LoMode);
+        if (isInitialized) doUpdate(ReasonForUpdateT.Update_Tuner_LoMode);
     }
     
     // TODO: Gain stuff
@@ -225,6 +238,6 @@ public class SDRplayDevice {
     
     public void setRfHz(double newRfHz) {
         nativeParams.rxChannelA.get().tunerParams.rfFreq.rfHz.set(newRfHz);
-        doUpdate(ReasonForUpdateT.Update_Tuner_Frf);
+        if (isInitialized) doUpdate(ReasonForUpdateT.Update_Tuner_Frf);
     }
 }
