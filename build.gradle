@@ -1,14 +1,7 @@
 apply plugin: 'java-library'
-apply plugin: 'application' // This is only here to allow for easy testing of the library
-
-mainClassName = 'SDRPlayAPIJava.JNRMain'
 
 repositories {
     jcenter()
-}
-
-run {
-    systemProperties['jnr.ffi.compile.dump'] = 'true'
 }
 
 dependencies {
