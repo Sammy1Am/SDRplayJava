@@ -175,7 +175,7 @@ public class SDRplayDevice {
     /**
      * Determines the number of allowed LNA states based on the currently tuned frequency.
      * Should be overridden by specific device implementations.
-     * @return 
+     * @return Max number of LNA states.
      */
     public byte getNumLNAStates() {
         return this.NUM_LNA_STATES;

@@ -1,4 +1,8 @@
-apply plugin: 'java-library'
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+    id 'com.jfrog.bintray' version '1.8.5'
+}
 
 repositories {
     jcenter()
@@ -9,4 +13,81 @@ dependencies {
     
     //SDR Play API  
     implementation 'com.github.jnr:jnr-ffi:2.2.0'
+}
+
+// Publishing Info
+version = '0.6.0'
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+javadoc.failOnError = false
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives sourcesJar
+    archives javadocJar
+}
+
+def pomConfig = {
+    developers {
+        developer {
+            id "Sammy1Am"
+            name "Sam A"
+        }
+    }
+
+    scm {
+        url "https://github.com/Sammy1Am/SDRplayJava"
+    }
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = 'io.github.sammy1am'
+            artifactId = 'SDRplayJava'
+            version = '0.6.0'
+
+            from components.java
+            artifact sourcesJar {
+                classifier "sources"
+            }
+            artifact javadocJar {
+                classifier "javadoc"
+            }
+            
+            pom.withXml {
+                def root = asNode()
+                root.appendNode('description', 'Java wrapper for SDRplay API v3')
+                root.appendNode('name', 'SDRplayJava')
+                root.appendNode('url', 'https://github.com/Sammy1Am/SDRplayJava')
+                root.children().last() + pomConfig
+            }
+        }
+    }
+}
+
+bintray {
+	user = System.getProperty('bintray.user')
+	key = System.getProperty('bintray.key')
+	publications = ['maven']
+
+	pkg {
+		repo = 'maven-releases'
+		name = 'SDRplayJava'
+                licenses = ['MIT']
+		vcsUrl = 'https://github.com/Sammy1Am/SDRplayJava.git'
+		version {
+			name = '0.6.0'
+			desc = '0.6.0'
+			released  = new Date()
+		}
+	}
+
 }
