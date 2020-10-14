@@ -1,5 +1,6 @@
 package io.github.sammy1am.sdrplay;
 
+import io.github.sammy1am.sdrplay.model.RSPDuo;
 import io.github.sammy1am.sdrplay.jnr.SDRplayAPIJNR;
 import io.github.sammy1am.sdrplay.jnr.SDRplayAPIJNR.ErrT;
 import java.util.ArrayList;
@@ -63,7 +64,15 @@ public class SDRplayAPI {
         
         for (int d=0;d<numDevices.intValue();d++) {
             // Create a new SDRplayDevice using the native device and add it to the list
-            returnDevices.add(new SDRplayDevice(devices[d]));
+            switch (devices[d].hwVer.byteValue()) {
+                //TODO Add device classes for other models
+                case 3:
+                    returnDevices.add(new RSPDuo(devices[d]));
+                    break;
+                case 1:
+                default:
+                    returnDevices.add(new SDRplayDevice(devices[d]));
+            }
         }
         
         return returnDevices;

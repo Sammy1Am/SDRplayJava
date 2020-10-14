@@ -5,6 +5,7 @@ import io.github.sammy1am.sdrplay.SDRplayDevice;
 import java.util.List;
 import io.github.sammy1am.sdrplay.StreamsReceiver;
 import io.github.sammy1am.sdrplay.jnr.CallbackFnsT.StreamCbParamsT;
+import io.github.sammy1am.sdrplay.jnr.SDRplayAPIJNR;
 
 /**
  * Basic sanity check for Java API.
@@ -22,9 +23,10 @@ public class Main {
         List<SDRplayDevice> devices = SDRplayAPI.getDevices(1);
         SDRplayDevice dev = devices.get(0);
         
+        
         dev.select(); // Select device
         System.out.printf("Selected hwVer:%s serial:%s%n", dev.getHWModel(), dev.getSerialNumber());
-        
+        //dev.debugEnable(SDRplayAPIJNR.DbgLvl_t.DbgLvl_Verbose);
         SDRplayAPI.unlockDeviceApi(); // Unlock now that we've selected
         
         Processor p = new Processor();

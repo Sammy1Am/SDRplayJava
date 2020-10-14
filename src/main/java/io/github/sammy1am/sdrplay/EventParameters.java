@@ -4,10 +4,13 @@ import io.github.sammy1am.sdrplay.jnr.CallbackFnsT.EventParamsT;
 import io.github.sammy1am.sdrplay.jnr.CallbackFnsT.GainCbParamT;
 import io.github.sammy1am.sdrplay.jnr.CallbackFnsT.PowerOverloadCbEventIdT;
 import io.github.sammy1am.sdrplay.jnr.CallbackFnsT.PowerOverloadCbParamT;
+import io.github.sammy1am.sdrplay.jnr.CallbackFnsT.RspDuoModeCbEventIdT;
 import io.github.sammy1am.sdrplay.jnr.CallbackFnsT.RspDuoModeCbParamT;
 
 /**
- * Java-tized EventParamsT to allow access to inner structures without JNR library.
+ * Java-tized EventParamsT to allow access to inner structures without JNR library.  This is 
+ * tenable because these are read-only values and we don't need to write them back to native
+ * memory.
  * @author Sammy1Am
  */
 public class EventParameters {
@@ -22,8 +25,13 @@ public class EventParameters {
     }
 
     public static class GainCbParam {
-        // TODO
+        public final long gRdB;
+        public final long lnaGRdB;
+        public final double currGain;
         public GainCbParam(GainCbParamT gP) {
+            gRdB = gP.gRdB.get();
+            lnaGRdB = gP.lnaGRdb.get();
+            currGain = gP.currGain.get();
         }
     }
 
@@ -36,8 +44,9 @@ public class EventParameters {
     }
 
     public static class RspDuoModeCbParam {
-        // TODO
+        public final RspDuoModeCbEventIdT modeChangeType;
         public RspDuoModeCbParam(RspDuoModeCbParamT rDMP) {
+            modeChangeType = rDMP.modeChangeType.get();
         }
     }
 }

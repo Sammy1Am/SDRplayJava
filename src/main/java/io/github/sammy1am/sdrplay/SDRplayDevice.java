@@ -12,7 +12,6 @@ import io.github.sammy1am.sdrplay.jnr.SDRplayAPIJNR.DbgLvl_t;
 import io.github.sammy1am.sdrplay.jnr.SDRplayAPIJNR.DeviceT;
 import io.github.sammy1am.sdrplay.jnr.SDRplayAPIJNR.ReasonForUpdateExtension1T;
 import io.github.sammy1am.sdrplay.jnr.SDRplayAPIJNR.ReasonForUpdateT;
-import io.github.sammy1am.sdrplay.jnr.TunerParamsT;
 import io.github.sammy1am.sdrplay.jnr.TunerParamsT.Bw_MHzT;
 import io.github.sammy1am.sdrplay.jnr.TunerParamsT.If_kHzT;
 import io.github.sammy1am.sdrplay.jnr.TunerParamsT.LoModeT;
@@ -21,7 +20,9 @@ import jnr.ffi.Pointer;
 import jnr.ffi.byref.PointerByReference;
 
 /**
- * Java wrapper representing a single SDRplay device.
+ * Java wrapper representing a single SDRplay device.  This base class should work
+ * fine for any SDRplay device, but for model-specific functionality the classes
+ * in io.github.sammy1am.sdrplay.model should be used.
  * @author Sammy1Am
  */
 public class SDRplayDevice {
@@ -30,10 +31,10 @@ public class SDRplayDevice {
     
     
     /** Representation of this device in native API memory. */
-    private DeviceT nativeDevice;
+    protected DeviceT nativeDevice;
     
     /** Representation of parameters for this device in native API memory. */
-    private DeviceParamsT nativeParams = new DeviceParamsT(RUNTIME);
+    protected DeviceParamsT nativeParams = new DeviceParamsT(RUNTIME);
     
     /** Callbacks for receiving stream and event data */
     private CallbackFnsT callbacks = new CallbackFnsT(RUNTIME);
@@ -88,6 +89,13 @@ public class SDRplayDevice {
      * called after settings changes or not.
      */
     private boolean isInitialized = false;
+    
+    /**
+     * Specifies the number of LNA states available for this device.  At time of coding
+     * the lowest number of states is 4 supported on the RSP1.  Higher numbers of states
+     * are implemented by specific model classes.
+     */
+    private final byte NUM_LNA_STATES = 4;
     
     /**
      * Creates a friendly Java wrapper around an SDRplay API device.
@@ -164,6 +172,14 @@ public class SDRplayDevice {
         }
     }
     
+    /**
+     * Determines the number of allowed LNA states based on the currently tuned frequency.
+     * Should be overridden by specific device implementations.
+     * @return 
+     */
+    public byte getNumLNAStates() {
+        return this.NUM_LNA_STATES;
+    }
     
     /*******************
      * DEVICE PARAMETERS
@@ -231,7 +247,14 @@ public class SDRplayDevice {
         if (isInitialized) doUpdate(ReasonForUpdateT.Update_Tuner_LoMode);
     }
     
-    // TODO: Gain stuff
+    public byte getLNAState() {
+        return nativeParams.rxChannelA.get().tunerParams.gain.LNAstate.byteValue();
+    }
+    
+    public void setLNAState(byte newLNAState) {
+        nativeParams.rxChannelA.get().tunerParams.gain.LNAstate.set(newLNAState);
+        if (isInitialized) doUpdate(ReasonForUpdateT.Update_Tuner_Gr);
+    }
     
     public double getRfHz() {
         return nativeParams.rxChannelA.get().tunerParams.rfFreq.rfHz.get();

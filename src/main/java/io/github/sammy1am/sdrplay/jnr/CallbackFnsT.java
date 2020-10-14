@@ -27,7 +27,8 @@ public class CallbackFnsT extends BaseStruct {
         super(runtime);
     }
     
-    // TODO Explicitly converting pointers to structs here-- not sure if this is most efficient
+    // TODO Explicitly converting pointers to structs here-- not sure if this is most efficient,
+    // seems like JNR should be able to do this for us
     public static interface StreamCallback {
         @Delegate
         default public void call(jnr.ffi.Pointer xi, jnr.ffi.Pointer xq, jnr.ffi.Pointer params, int numSamples, int reset, jnr.ffi.Pointer cbContext){
