@@ -87,8 +87,8 @@ public class SDRplayAPI {
         RSP1(1),
         RSP1A(255),
         RSP2(2),
-        RSPduo(3),
-        RSPdx(4);
+        RSPDUO(3),
+        RSPDX(4);
         
         private final int val;
         
