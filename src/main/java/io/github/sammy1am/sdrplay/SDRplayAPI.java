@@ -1,6 +1,7 @@
 package io.github.sammy1am.sdrplay;
 
 import io.github.sammy1am.sdrplay.model.RSPDuo;
+import io.github.sammy1am.sdrplay.model.RSP1A;
 import io.github.sammy1am.sdrplay.jnr.SDRplayAPIJNR;
 import io.github.sammy1am.sdrplay.jnr.SDRplayAPIJNR.ErrT;
 import java.util.ArrayList;
@@ -64,11 +65,14 @@ public class SDRplayAPI {
         
         for (int d=0;d<numDevices.intValue();d++) {
             // Create a new SDRplayDevice using the native device and add it to the list
-            switch (devices[d].hwVer.byteValue()) {
+            switch ((int) devices[d].hwVer.byteValue() & 0xFF) {
                 //TODO Add device classes for other models
                 case 3:
                     returnDevices.add(new RSPDuo(devices[d]));
                     break;
+                case 255:
+                	returnDevices.add(new RSP1A(devices[d]));
+                	break;
                 case 1:
                 default:
                     returnDevices.add(new SDRplayDevice(devices[d]));
@@ -79,12 +83,12 @@ public class SDRplayAPI {
     }
     
     public static enum HWModel {
-        UNKNOWN(-1),
+        UNKNOWN(0),
         RSP1(1),
         RSP1A(255),
         RSP2(2),
-        RSPduo(3),
-        RSPdx(4);
+        RSPDUO(3),
+        RSPDX(4);
         
         private final int val;
         

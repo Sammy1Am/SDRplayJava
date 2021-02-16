@@ -119,7 +119,8 @@ public interface SDRplayAPIJNR {
         Update_RspDuo_AmPortSelect        (0x10000000),
         Update_RspDuo_Tuner1AmNotchControl(0x20000000),
         Update_RspDuo_RfNotchControl      (0x40000000),
-        Update_RspDuo_RfDabNotchControl   (0x80000000);
+        Update_RspDuo_RfDabNotchControl   (0x80000000),
+    	Update_Custom_sdrtrunk_SampleRateChange (0x00000001 & 0x00040000 & 0x00080000);
          
         private final int val;
 
