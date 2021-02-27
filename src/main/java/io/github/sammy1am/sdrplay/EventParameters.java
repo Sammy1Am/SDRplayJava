@@ -1,6 +1,7 @@
 package io.github.sammy1am.sdrplay;
 
 import io.github.sammy1am.sdrplay.jnr.CallbackFnsT.EventParamsT;
+import io.github.sammy1am.sdrplay.jnr.CallbackFnsT.EventT;
 import io.github.sammy1am.sdrplay.jnr.CallbackFnsT.GainCbParamT;
 import io.github.sammy1am.sdrplay.jnr.CallbackFnsT.PowerOverloadCbEventIdT;
 import io.github.sammy1am.sdrplay.jnr.CallbackFnsT.PowerOverloadCbParamT;
@@ -14,14 +15,23 @@ import io.github.sammy1am.sdrplay.jnr.CallbackFnsT.RspDuoModeCbParamT;
  * @author Sammy1Am
  */
 public class EventParameters {
-    public final GainCbParam gainParams;
-    public final PowerOverloadCbParam powerOverloadParams;
-    public final RspDuoModeCbParam  rspDuoModeParams;
+    public GainCbParam gainParams = null;
+    public PowerOverloadCbParam powerOverloadParams = null;
+    public RspDuoModeCbParam  rspDuoModeParams = null;
     
-    public EventParameters(EventParamsT eventParams) {
-        gainParams = new GainCbParam(eventParams.gainParams);
-        powerOverloadParams = new PowerOverloadCbParam(eventParams.powerOverloadParams);
-        rspDuoModeParams = new RspDuoModeCbParam(eventParams.rspDuoModeParams);
+    public EventParameters(EventT eventId, EventParamsT eventParams) {
+    	switch(eventId) {
+    	case GainChange:
+    		gainParams = new GainCbParam(eventParams.gainParams);
+    		break;
+    	case PowerOverloadChange:
+    		powerOverloadParams = new PowerOverloadCbParam(eventParams.powerOverloadParams);
+    		break;
+    	case RspDuoModeChange:
+    		rspDuoModeParams = new RspDuoModeCbParam(eventParams.rspDuoModeParams);
+    		break;
+    	default:
+    	}
     }
 
     public static class GainCbParam {

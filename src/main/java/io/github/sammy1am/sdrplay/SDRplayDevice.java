@@ -75,8 +75,9 @@ public class SDRplayDevice {
 
     CallbackFnsT.EventCallback ecb = new CallbackFnsT.EventCallback() {
         @Override
-        public void call(EventT eventId, TunerSelectT tuner, EventParamsT params, Pointer cbContext) {
-            streamsReceiver.receiveEvent(eventId, tuner, new EventParameters(params));
+        public void call(EventT eventId, TunerSelectT tuner, EventParameters params) {
+        	if(isInitialized)
+	            streamsReceiver.receiveEvent(eventId, tuner, params);
         }
     };
     
@@ -124,6 +125,9 @@ public class SDRplayDevice {
     
     public void select() {
         try {
+        	//TODO: Make sure this is commented out and not in release.  Disable heartbeat for debugging only.
+        	//JNRAPI.sdrplay_api_DisableHeartbeat();
+        	
             // Select the device in the API
             ApiException.checkErrorCode(JNRAPI.sdrplay_api_SelectDevice(nativeDevice));
             
@@ -194,6 +198,13 @@ public class SDRplayDevice {
                 TunerSelectT.Tuner_A, // TODO: assume TunerA here for now-- maybe get this from nativeDevice?
                 reason, 
                 ReasonForUpdateExtension1T.Update_Ext1_None));
+    }
+    
+    protected void doUpdate(ReasonForUpdateExtension1T extReason) {
+        ApiException.checkErrorCode(JNRAPI.sdrplay_api_Update(nativeDevice.dev.get(), 
+                TunerSelectT.Tuner_A, // TODO: assume TunerA here for now-- maybe get this from nativeDevice?
+                ReasonForUpdateT.Update_None, 
+                extReason));
     }
     
     /**
@@ -328,16 +339,19 @@ public class SDRplayDevice {
     
     public void setAGCEnabled(boolean enabled) {
     	if(enabled) {
-    		nativeParams.rxChannelA.get().ctrlParams.agc.enable.set(AgcControlT.AGC_50HZ);
+    		//TODO: according to SDRPlay need to calculate setpoint based upon sample rate - do not yet have the complete mapping
+    		nativeParams.rxChannelA.get().ctrlParams.agc.enable.set(AgcControlT.AGC_CTRL_EN);
     		nativeParams.rxChannelA.get().ctrlParams.agc.setPoint_dBfs.set(-30);
     		nativeParams.rxChannelA.get().ctrlParams.agc.attack_ms.set(500);
-    		nativeParams.rxChannelA.get().ctrlParams.agc.decay_delay_ms.set(200);
-    		nativeParams.rxChannelA.get().ctrlParams.agc.decay_threshold_dB.set(5);
-    		nativeParams.rxChannelA.get().ctrlParams.agc.syncUpdate.set(0);
+            nativeParams.rxChannelA.get().ctrlParams.agc.decay_ms.set(500);
+            nativeParams.rxChannelA.get().ctrlParams.agc.decay_delay_ms.set(200);
+            nativeParams.rxChannelA.get().ctrlParams.agc.decay_threshold_dB.set(5);
+            nativeParams.rxChannelA.get().ctrlParams.agc.syncUpdate.set(0);
     	}
     	else {
     		nativeParams.rxChannelA.get().ctrlParams.agc.enable.set(AgcControlT.AGC_DISABLE);
     	}
+    	
     	if (isInitialized) doUpdate(ReasonForUpdateT.Update_Ctrl_Agc);
     	
     }
@@ -355,6 +369,28 @@ public class SDRplayDevice {
     public void setLNAState(byte newLNAState) {
         nativeParams.rxChannelA.get().tunerParams.gain.LNAstate.set(newLNAState);
         if (isInitialized) doUpdate(ReasonForUpdateT.Update_Tuner_Gr);
+    }
+    
+    /**
+     * sdrplay_api_TunerParamsT.sdrplay_api_GainT.gRdB
+     * IF Gain - valid values between 20 and 59
+     * @return IF Gain
+     */
+    public int getIFGain() {
+    	return nativeParams.rxChannelA.get().tunerParams.gain.gRdB.intValue();
+    }
+    
+    public void setIFGain(int ifGain) {
+    	nativeParams.rxChannelA.get().tunerParams.gain.gRdB.set(ifGain);
+		if (isInitialized) doUpdate(ReasonForUpdateT.Update_Tuner_Gr);
+    }
+    
+    /**
+     * Total Gain - Combined RF and IF Gain As Reported by the SDRPlay API
+     * @return Total Gain
+     */
+    public float getTotalGain() {
+    	return nativeParams.rxChannelA.get().tunerParams.gain.gainVals.curr.get();
     }
     
     /**
@@ -387,11 +423,32 @@ public class SDRplayDevice {
     		
     	if (isInitialized) doUpdate(ReasonForUpdateT.Update_Ctrl_Decimation);
     }
+    
+    /**
+     * Does nothing here, overide in model specific class
+     * @return Antenna Selection
+     */
+    public int getAntenna() {
+    	return 0;
+    }
+    
+    public void setAntenna(int antSel) {
+    	// do nothing here
+    }
+    
  
     /**
-     * Tells the SDRPlay device we have received its antenna overload callback
+     * Tells the SDRPlay device we have received its RF overload callback
      */
     public void acknowledgeOverload() {
-        if (isInitialized) doUpdate(ReasonForUpdateT.Update_Ctrl_OverloadMsgAck);
+        //if (isInitialized) doUpdate(ReasonForUpdateT.Update_Ctrl_OverloadMsgAck);
+        
+    	//TODO: figure out why spurious overload event is generated on shutdown
+    	// in the meantime, don't report errors for this call
+    	if (isInitialized)
+        JNRAPI.sdrplay_api_Update(nativeDevice.dev.get(), 
+                TunerSelectT.Tuner_A,
+                ReasonForUpdateT.Update_Ctrl_OverloadMsgAck, 
+                ReasonForUpdateExtension1T.Update_Ext1_None);
     }
 }

@@ -6,6 +6,7 @@
 package io.github.sammy1am.sdrplay.jnr;
 
 import jnr.ffi.Struct;
+import jnr.ffi.NativeType;
 import jnr.ffi.Runtime;
 import jnr.ffi.util.EnumMapper;
 
@@ -14,21 +15,23 @@ import jnr.ffi.util.EnumMapper;
  * @author Sammy1Am
  */
 public class TunerParamsT extends Struct{
-    public Enum<Bw_MHzT> bwType;          // default: BW_0_200
-    public Enum<If_kHzT> ifType;          // default: IF_Zero
-    public Enum<LoModeT> loMode;          // default: LO_Auto
+    public Enum32<Bw_MHzT> bwType;          // default: BW_0_200
+    public Enum32<If_kHzT> ifType;          // default: IF_Zero
+    public Enum32<LoModeT> loMode;          // default: LO_Auto
     public GainT gain;
     public RfFreqT rfFreq;
     public DcOffsetTunerT dcOffsetTuner;
+    public Padding pad;						// Machine Alignment
         
     public TunerParamsT(final Runtime runtime) {
         super(runtime);
-        bwType = new Enum<>(Bw_MHzT.class);
-        ifType = new Enum<>(If_kHzT.class);
-        loMode = new Enum<>(LoModeT.class);
+        bwType = new Enum32<>(Bw_MHzT.class);
+        ifType = new Enum32<>(If_kHzT.class);
+        loMode = new Enum32<>(LoModeT.class);
         gain = inner(new GainT(runtime));
         rfFreq = inner(new RfFreqT(runtime));
         dcOffsetTuner = inner(new DcOffsetTunerT(runtime));
+        pad = new Padding(NativeType.UCHAR, 4);
     }
     
     public static enum Bw_MHzT {
@@ -142,49 +145,60 @@ public class TunerParamsT extends Struct{
     }
     
     public static class GainValuesT extends Struct {
-        public Float curr = new Float();
-        public Float max = new Float();
-        public Float min = new Float();
+        public Float curr;
+        public Float max;
+        public Float min;
         
         public GainValuesT(final Runtime runtime) {
             super(runtime);
+            curr = new Float();
+            max = new Float();
+            min = new Float();
         }
     }
     
     public static class GainT extends Struct {
-        public Signed32 gRdB;                  // default: 50
-        public Unsigned8 LNAstate;             // default: 0
-        public Unsigned8 syncUpdate;           // default: 0
-        public Enum<MinGainReductionT> minGr;  // default: NORMAL_MIN_GR
-        public GainValuesT gainVals;           // output parameter
+        public int32_t gRdB;                    // default: 20-59
+        public Unsigned8 LNAstate;               // default: 0
+        public Unsigned8 syncUpdate;             // default: 0
+        public Enum32<MinGainReductionT> minGr;  // default: NORMAL_MIN_GR
+        public GainValuesT gainVals;             // output parameter
         
         public GainT(final Runtime runtime) {
             super(runtime);
-            gRdB = new Signed32();
+            gRdB = new int32_t();
             LNAstate = new Unsigned8();
             syncUpdate = new Unsigned8();
-            minGr = new Enum<>(MinGainReductionT.class);
+            minGr = new Enum32<>(MinGainReductionT.class);
             gainVals = inner(new GainValuesT(runtime));
         }
     }
     
     public static class RfFreqT extends Struct {
-        public Double rfHz = new Double();             // default: 200000000.0
-        public Unsigned8 syncUpdate = new Unsigned8(); // default: 0
+        public Double rfHz;             	// default: 200000000.0
+        public Unsigned8 syncUpdate; 		// default: 0
+        public Padding pad;                	// Alignment padding.
         
         public RfFreqT(final Runtime runtime) {
             super(runtime);
+            rfHz = new Double();
+            syncUpdate = new Unsigned8();
+            pad = new Padding(NativeType.UCHAR, 7);
         }
     }
     
     public static class DcOffsetTunerT extends Struct {
-        public Unsigned8 dcCal = new Unsigned8();         // default: 3 (Periodic mode)
-        public Unsigned8 speedUp = new Unsigned8();       // default: 0 (No speedup)
-        public Signed32 trackTime = new Signed32();       // default: 1    (=> time in uSec = (72 * 3 * trackTime) / 24e6       = 9uSec)
-        public Signed32 refreshRateTime = new Signed32(); // default: 2048 (=> time in uSec = (72 * 3 * refreshRateTime) / 24e6 = 18432uSec)
+        public Unsigned8 dcCal;         // default: 3 (Periodic mode)
+        public Unsigned8 speedUp;       // default: 0 (No speedup)
+        public Signed32 trackTime;       // default: 1    (=> time in uSec = (72 * 3 * trackTime) / 24e6       = 9uSec)
+        public Signed32 refreshRateTime; // default: 2048 (=> time in uSec = (72 * 3 * refreshRateTime) / 24e6 = 18432uSec)
         
         public DcOffsetTunerT(final Runtime runtime) {
             super(runtime);
+            dcCal = new Unsigned8();
+            speedUp = new Unsigned8();
+            trackTime = new Signed32();
+            refreshRateTime = new Signed32();
         }
     }
 }
