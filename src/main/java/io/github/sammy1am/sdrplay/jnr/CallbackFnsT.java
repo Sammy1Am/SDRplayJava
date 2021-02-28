@@ -5,6 +5,7 @@
  */
 package io.github.sammy1am.sdrplay.jnr;
 
+import io.github.sammy1am.sdrplay.EventParameters;
 import io.github.sammy1am.sdrplay.SDRplayAPI;
 import io.github.sammy1am.sdrplay.jnr.TunerParamsT.TunerSelectT;
 import jnr.ffi.annotations.Delegate;
@@ -29,9 +30,10 @@ public class CallbackFnsT extends BaseStruct {
     
     // TODO Explicitly converting pointers to structs here-- not sure if this is most efficient,
     // seems like JNR should be able to do this for us
-    public static interface StreamCallback {
+    public interface StreamCallback {
         @Delegate
-        default public void call(jnr.ffi.Pointer xi, jnr.ffi.Pointer xq, jnr.ffi.Pointer params, int numSamples, int reset, jnr.ffi.Pointer cbContext){
+        default public void call(jnr.ffi.Pointer xi, jnr.ffi.Pointer xq, jnr.ffi.Pointer params, int numSamples, int reset, jnr.ffi.Pointer cbContext)
+        {
             StreamCbParamsT paramsStruct = new StreamCbParamsT(SDRplayAPI.getJNRRuntime());
             paramsStruct.useMemory(params);
             
@@ -41,19 +43,24 @@ public class CallbackFnsT extends BaseStruct {
         public void call(jnr.ffi.Pointer xi, jnr.ffi.Pointer xq, StreamCbParamsT params, int numSamples, int reset, jnr.ffi.Pointer cbContext);
     }
 
-    public static interface EventCallback {
+    public interface EventCallback {
         @Delegate
-        default public void call(int eventId, int tuner, jnr.ffi.Pointer params, jnr.ffi.Pointer cbContext) {
-            EventParamsT paramsStruct = new EventParamsT(SDRplayAPI.getJNRRuntime());
-            paramsStruct.useMemory(params);
-            
-            call(EventT.valueOf(eventId),
-                    TunerSelectT.valueOf(tuner),
-                    paramsStruct,
-                    cbContext);
+        default public void call(int eventId, int tuner, jnr.ffi.Pointer params, jnr.ffi.Pointer cbContext) 
+        {
+        	try {
+	            EventParamsT paramsStruct = new EventParamsT(SDRplayAPI.getJNRRuntime());
+	            paramsStruct.useMemory(params);
+	            EventParameters parms = new EventParameters(EventT.valueOf(eventId), paramsStruct);
+	            
+	            call(EventT.valueOf(eventId), TunerSelectT.valueOf(tuner), parms);
+        	}
+        	catch(Throwable ex) {
+        		System.out.println(ex.toString());
+        		ex.printStackTrace();
+        	}
         };
         
-        public void call(EventT eventId, TunerSelectT tuner, EventParamsT params, jnr.ffi.Pointer cbContext);
+        public void call(EventT eventId, TunerSelectT tuner, EventParameters params);
     }
     
     public static enum PowerOverloadCbEventIdT {

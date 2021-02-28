@@ -2,6 +2,7 @@ package io.github.sammy1am.sdrplay;
 
 import io.github.sammy1am.sdrplay.model.RSPDuo;
 import io.github.sammy1am.sdrplay.model.RSP1A;
+import io.github.sammy1am.sdrplay.model.RSPDX;
 import io.github.sammy1am.sdrplay.jnr.SDRplayAPIJNR;
 import io.github.sammy1am.sdrplay.jnr.SDRplayAPIJNR.ErrT;
 import java.util.ArrayList;
@@ -72,6 +73,9 @@ public class SDRplayAPI {
                     break;
                 case 255:
                 	returnDevices.add(new RSP1A(devices[d]));
+                	break;
+                case 4:
+                	returnDevices.add(new RSPDX(devices[d]));
                 	break;
                 case 1:
                 default:

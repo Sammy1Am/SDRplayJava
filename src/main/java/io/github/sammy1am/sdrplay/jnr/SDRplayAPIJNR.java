@@ -27,7 +27,7 @@ public interface SDRplayAPIJNR {
     ErrT sdrplay_api_GetDevices(@Out @Direct DeviceT[] devices, IntByReference numDevs, int maxDevs);
     ErrT sdrplay_api_SelectDevice(@Direct DeviceT device);
     ErrT sdrplay_api_ReleaseDevice(@Direct DeviceT device);
-    
+    ErrT sdrplay_api_DisableHeartbeat();
     String sdrplay_api_GetErrorString(ErrT err);
 
     ErrT sdrplay_api_DebugEnable(@Direct Pointer dev, DbgLvl_t enable);
@@ -132,6 +132,10 @@ public interface SDRplayAPIJNR {
         public int intValue() {
             return val;
         }
+        
+        public static final ReasonForUpdateT valueOf(int pattern) {
+            return (ReasonForUpdateT)EnumMapper.getInstance(ReasonForUpdateT.class).valueOf(pattern);
+        }
     }
     
     public static enum ReasonForUpdateExtension1T implements EnumMapper.IntegerEnum {
@@ -154,6 +158,10 @@ public interface SDRplayAPIJNR {
         @Override
         public int intValue() {
             return val;
+        }
+        
+        public static final ReasonForUpdateExtension1T valueOf(int pattern) {
+            return (ReasonForUpdateExtension1T)EnumMapper.getInstance(ReasonForUpdateExtension1T.class).valueOf(pattern);
         }
     }
     

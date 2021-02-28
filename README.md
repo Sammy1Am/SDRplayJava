@@ -20,5 +20,16 @@ A Java wrapper for the [SDRplay API v3](https://www.sdrplay.com/) using [JNR-FFI
  * Digital Audio Broadcast (DAB) Notch (RSP1A only)
  * Bias-T (RSP1A only) 
 
+ ### Modifications v0.8.0 Neil Harvey 2021
+ * Fixed machine alignment of API Structs to make up for JNR bug/oversight
+ * RSPDX device specific functionality
+   * RF Notch
+   * DAB Notch
+   * Bias T
+   * Antenna Select
+* Allow adjustment of IF Gain
+* Enhance gain and overload event propagation
+
+
 #### With Thanks To
 The [SerCeMan/jnr-fuse](https://github.com/SerCeMan/jnr-fuse) project for being an excellent example of working, complex JNR code.

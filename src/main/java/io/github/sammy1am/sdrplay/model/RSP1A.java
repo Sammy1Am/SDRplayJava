@@ -34,7 +34,7 @@ public class RSP1A extends SDRplayDevice {
     // TODO Implement model-specific functionality.
     @Override
     public boolean getRfNotch() {
-    	return (nativeParams.devParams.get().rsp1aParams.rfNotchEnable.get() >= 1);
+    	return (nativeParams.devParams.get().rsp1aParams.rfNotchEnable.get() > 0);
     }
     
     @Override
@@ -45,7 +45,7 @@ public class RSP1A extends SDRplayDevice {
     
     @Override
     public boolean getDABNotch() {
-    	return (nativeParams.devParams.get().rsp1aParams.rfNotchEnable.get() >= 1);
+    	return (nativeParams.devParams.get().rsp1aParams.rfNotchEnable.get() > 0);
     }
     
     @Override
@@ -56,7 +56,7 @@ public class RSP1A extends SDRplayDevice {
     
     @Override
     public boolean getBiasT() {
-    	return (nativeParams.rxChannelA.get().rsp1aTunerParams.biasTEnable.get() >= 1);
+    	return (nativeParams.rxChannelA.get().rsp1aTunerParams.biasTEnable.get() > 0);
     }
     
     @Override
